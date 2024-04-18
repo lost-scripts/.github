@@ -48,7 +48,7 @@
 	git clone --depth 1 -b ls_my_script file://D:/Rai/Projects/Moho/LS/ls ../ls_my_script # --depth requires such kind of absolute path
 	```
 
-	:memo: **Note:** The purpose of not just using e.g. `git clone -b main ../ls ../ls_my_script` [^2] is limit history to the very last commit.  
+	> :memo: **Note:** The purpose of not just using e.g. `git clone -b main ../ls ../ls_my_script` [^2] is limit history to the very last commit.  
 
 	As for now, the remotes for the _ls_my_script_ repo should look like this:
 
@@ -97,7 +97,7 @@
 	git fetch ls main # Bring changes only, so then you can do "git diff ...ls/main" (or git diff ..ls/main file-name) to see changes before doing "git merge ls main"
 	```
 
-	:memo: **Note:** In any case, all possible conflicts will have to be resolved. To delete all files detected as _deleted by us_ at once, you can use the following command:
+	> :warning: In any case, all possible conflicts will have to be resolved. To delete all files detected as _deleted by us_ at once, you can use the following command:
 
 	```bash
 	git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {} # Or its alias: grmu
@@ -136,7 +136,7 @@
 	git push origin main
 	```
 
-	:memo: **Note:** When the time comes to create a release, finish off the `.github/README.md` file and export it so that the resulting HTML file end up like this: `ScriptResources/ls_my_script/README.html`.
+	> :memo: **Note:** When the time comes to create a release, finish off the `.github/README.md` file and export it so that the resulting HTML file end up like this: `ScriptResources/ls_my_script/README.html`.
 ---
 
 ### 3\. Making a release
@@ -167,7 +167,7 @@
 	git archive --o "$(basename "$(git rev-parse --show-toplevel)").zip" main # Or the more advanced (with smart folder creation, autoname & alias prone e.g. garc): p mkdir -p _releases && git archive -o _releases/$(basename "$(git rev-parse --show-toplevel)").zip main
 	```
 
-	:memo: **Note:** To exclude some elements, create a .gitattributes file in the root of the script repo and put on it e.g.:
+	> :memo: **Note:** To exclude some elements, create a .gitattributes file in the root of the script repo and put on it e.g.:
 
 	```
 	.gitattributes export-ignore
