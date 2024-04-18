@@ -1,11 +1,9 @@
-<center><h2>LOST SCRIP CREATION & WORKFLOW</h2></center>
+<h1 align="center">Lost Script Creation & Workflow</h2><br>
 
----
+### 1\. Creating a new script
 
-### 1\. CLONING THE SCRIPT'S REPO
-
-* 1.1\. Starting from a kind of _superproject_ structure containing all project's common and shared files in e.g.:
- 	<br/>
+* 1.1\. Starting from a kind of _super-repository_ _[ls][1]_ containing all project's common and shared files in e.g.:
+ 	<br>
 	<details>
 		<summary>D:/Rai/Projects/Moho/LS/ (Click to expand)</summary>
 
@@ -42,23 +40,22 @@
 		└───📂Utility
 				ls_utilities.lua
 	</details>
-	<br/>
+	<br>
 
-	And assuming there is a `main` and a `dev` branch [^1], proceed to clone (relative paths will depend on where the command is executed from) as follows:
+	And assuming it has a `main` and a `dev` branch [^1], proceed to make a clone of it (these relative paths assume you are executing the commands from the repo to clone) as follows:
 
 	```bash
-		git clone -b main ../ls ../ls_my_script # -b main sirve para especificar la rama a clonar (si se omite se clona la rama por defecto), ls es el nombre del remoto del repositorio (o, si no aplica, su path) y, por último, ls_my_script es el nombre del directorio donde se clonará el repositorio.
-	```
-	```bash
-		git clone --depth 1 -b ls_my_script file://D:/Ramon0/Projects/Moho/LS/ls ../ls_my_script # O, e.g. desde el repo a clonar, usar esta variante para limitar el historial solo al último commit (--depth requiere que el path sea absoluto y en ese formato).
+		git clone --depth 1 -b ls_my_script file://D:/Rai/Projects/Moho/LS/ls ../ls_my_script # --depth requires absolute paths in such format
 	```
 
-	Remotes for the _ls_my_script_ repo should look, for the moment, like this:
+	:memo: **Note:** The goal of not simply use e.g. `git clone -b main ../ls ../ls_my_script` [^2] is limit history to the very last commit (--depth requires to use that absolute path).  
+
+	Currently, the remotes for the _ls_my_script_ repo should look like this:
 
 	```bash
 		git remote -v
-		origin  file://D:/Ramon0/Projects/Moho/LS/ls (fetch)
-		origin  file://D:/Ramon0/Projects/Moho/LS/ls (push)
+		origin  file://D:/Rai/Projects/Moho/LS/ls (fetch)
+		origin  file://D:/Rai/Projects/Moho/LS/ls (push)
 	```
 
 	Rename it and, for convenience, <u>make its path relative</u>:
@@ -82,14 +79,14 @@
 
 	```bash
 		cd ../ls_my_script
-		git rm -r Modules # Delete "Modules" folder and its contents
-		git rm Utility/ls_utilities_ext.lua # Delete only ls_utilities_ext.lua
-		git add -A # Add (even untracked) & remove files, is the equivalent of "addremove". If necessary, use: git add -u instead for adding only the deleted files.
+		git rm -r Modules # Should not using any of its contents, directly delete "Modules" folder
+		git rm Utility/ls_utilities_ext.lua # Delete only the unused ls_utilities_ext.lua
+		git add -A # This adds (even untracked) & removes files, is equivalent to "addremove" (if necessary, use: git add -u instead for adding only deleted files)
 		git commit -m "ls_my_script: Initial commit"
 	```
 ---
 
-### 2\. WORKFLOW
+### 2\. Workflow
 
 * 2.1\. Two ways for bringing changes in the _monorepo_ "ls" to the script repo:
 
@@ -142,7 +139,7 @@
 	:memo: **Note:** When the time comes to create a release, finish off the `.github/README.md` file and export it so that the resulting HTML file end up like this: `ScriptResources/ls_my_script/README.html`.
 ---
 
-### 3\. MAKING A RELEASE
+### 3\. Making a release
 
 * 3.1\. Finally, when everything is ready for launching a release, start for creating an _annotated tag_:
 
@@ -178,4 +175,8 @@
 		/.github export-ignore
 	```
 
-[^1]: Current development should be done in _dev_ branch and merged with _main_ once significant progress has been made and testes. More on this later...
+[^1]: Current development should be done in _dev_ branch and merged with _main_ once significant progress has been made and testes. But more on this later...
+
+[^2]: `-b main` specifies the branch to clone (if omitted, the default one is cloned), `ls` is the name of repository's remote (or, if not applicable, its path) and, finally, `ls_my_script` is the name of the directory where the repository will be cloned.
+
+[1]: <https://github.com/lost-scripts/ls> 'Go to "ls" super-repository on GitHub'
