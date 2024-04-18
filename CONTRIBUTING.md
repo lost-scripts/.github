@@ -45,10 +45,10 @@
 	And assuming it has a `main` and a `dev` branch [^1], proceed to make a clone of it (these relative paths assume you are executing the commands from the repo to clone) as follows:
 
 	```bash
-	git clone --depth 1 -b ls_my_script file://D:/Rai/Projects/Moho/LS/ls ../ls_my_script # --depth requires absolute paths in such format
+	git clone --depth 1 -b ls_my_script file://D:/Rai/Projects/Moho/LS/ls ../ls_my_script # --depth requires such kind of absolute path
 	```
 
-	:memo: **Note:** The goal of not simply use e.g. `git clone -b main ../ls ../ls_my_script` [^2] is limit history to the very last commit.  
+	:memo: **Note:** The purpose of not just using e.g. `git clone -b main ../ls ../ls_my_script` [^2] is limit history to the very last commit.  
 
 	As for now, the remotes for the _ls_my_script_ repo should look like this:
 
@@ -58,7 +58,7 @@
 	origin  file://D:/Rai/Projects/Moho/LS/ls (push)
 	```
 
-	Rename it and, for convenience, <u>make its path relative</u>:
+	Rename it and, for convenience, **make its path relative**:
 
 	```bash
 	git remote rename origin ls
@@ -75,26 +75,26 @@
 	ls  ../ls (push)
 	```
 
-* 1.2\. From the new script repo, add the script's own files like _ls_my_script.lua_ and so, and <u>remove any shared files it may not need</u>, either by means of the explorer or the console, e.g.:
+* 1.2\. From the new script repo, add the script's own files like _ls_my_script.lua_ and so, and **remove any shared files it may not need**, either by means of the explorer or the console, e.g.:
 
 	```bash
 	cd ../ls_my_script
 	git rm -r Modules # Should not using any of its contents, directly delete "Modules" folder
 	git rm Utility/ls_utilities_ext.lua # Delete only the unused ls_utilities_ext.lua
-	git add -A # This adds (even untracked) & removes files, is equivalent to "addremove" (if necessary, use: git add -u instead for adding only deleted files)
+	git add -A # Similarly to "addremove", adds (even untracked) & removes files (if necessary, use: git add -u instead to add only deleted files)
 	git commit -m "ls_my_script: Initial commit"
 	```
 ---
 
 ### 2\. The workflow
 
-* 2.1\. Two ways for bringing changes in the _monorepo_ "ls" to the script repo:
+* 2.1\. Two ways for bringing changes in the _super-repo_ "ls" to the script repo:
 
 	```bash
 	git pull ls main # Bring changes and merge all at once (recommended)
 	```
 	```bash
-	git fetch ls main # Bring changes only, so then you can do e.g. "git diff ...ls/main" (or git diff ..ls/main file-name) to see changes before doing "git merge ls main"
+	git fetch ls main # Bring changes only, so then you can do "git diff ...ls/main" (or git diff ..ls/main file-name) to see changes before doing "git merge ls main"
 	```
 
 	:memo: **Note:** In any case, all possible conflicts will have to be resolved. To delete all files detected as _deleted by us_ at once, you can use the following command:
@@ -127,7 +127,7 @@
 	```
 
 	```bash
-	git pull ls main # To bring any possible changes in common/shared files from the, equally up-to-date, local monorepo "ls"
+	git pull ls main # To bring any possible changes in common/shared files from an up-to-date local super-repo "ls"
 	```
 
 * 2.4\. Now, local changes can be pushed safely to the remote repository of the script on GitHub as usually:
@@ -164,7 +164,7 @@
 	git archive -o ls_my_script.zip main # Simplest (equate to: git archive --format zip --output ls_my_script.zip main)
 	```
 	```bash
-	git archive --o "$(basename "$(git rev-parse --show-toplevel)").zip" main # Advanced (ensure destination folder exists, autoname & allow alias e.g. garc): p mkdir -p _releases && git archive -o _releases/$(basename "$(git rev-parse --show-toplevel)").zip main
+	git archive --o "$(basename "$(git rev-parse --show-toplevel)").zip" main # Or the more advanced (with smart folder creation, autoname & alias prone e.g. garc): p mkdir -p _releases && git archive -o _releases/$(basename "$(git rev-parse --show-toplevel)").zip main
 	```
 
 	:memo: **Note:** To exclude some elements, create a .gitattributes file in the root of the script repo and put on it e.g.:
