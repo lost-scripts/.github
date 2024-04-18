@@ -45,7 +45,7 @@
 	And assuming it has a `main` and a `dev` branch [^1], proceed to make a clone of it (these relative paths assume you are executing the commands from the repo to clone) as follows:
 
 	```bash
-		git clone --depth 1 -b ls_my_script file://D:/Rai/Projects/Moho/LS/ls ../ls_my_script # --depth requires absolute paths in such format
+	git clone --depth 1 -b ls_my_script file://D:/Rai/Projects/Moho/LS/ls ../ls_my_script # --depth requires absolute paths in such format
 	```
 
 	:memo: **Note:** The goal of not simply use e.g. `git clone -b main ../ls ../ls_my_script` [^2] is limit history to the very last commit (--depth requires to use that absolute path).  
