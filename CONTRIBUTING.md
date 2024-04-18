@@ -86,7 +86,7 @@
 	```
 ---
 
-### 2\. Workflow
+### 2\. The workflow
 
 * 2.1\. Two ways for bringing changes in the _monorepo_ "ls" to the script repo:
 
