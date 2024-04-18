@@ -64,7 +64,7 @@
 	git remote rename origin ls
 	```
 	```bash
-	git remote set-url ls ../ls 
+	git remote set-url ls ../ls # Now the remote ls relatively points to the local super-repo "ls" 
 	```
 
 	So it end up looking like this:
@@ -83,6 +83,14 @@
 	git rm Utility/ls_utilities_ext.lua # Delete only the unused ls_utilities_ext.lua
 	git add -A # Similarly to "addremove", adds (even untracked) & removes files (if necessary, use: git add -u instead to add only deleted files)
 	git commit -m "ls_my_script: Initial commit"
+	```
+
+* 1.3\. Now your script repository is ready for start working locally. To host it on GitHub, create a namesake repository there and follow the suggested instructions:
+
+	```bash
+	git remote add origin https://github.com/lost-scripts/ls_my_script.git
+	git branch -M main # Not necessary if you already use main...
+	git push -u origin main
 	```
 ---
 
@@ -168,12 +176,14 @@
 	```
 
 	> :memo: **Note:** To exclude elements, create a .gitattributes file in the root of the script repo and put on it e.g.:
+	>```
+	>.gitattributes export-ignore
+	>.gitignore export-ignore
+	>/.github export-ignore
+	>```
+	><br>
 
-	```
-	.gitattributes export-ignore
-	.gitignore export-ignore
-	/.github export-ignore
-	```
+	
 
 [^1]: Current development should be done in _dev_ branch or derivates and merged with _main_ once significant progress has been made and testes. But more on this later...
 
