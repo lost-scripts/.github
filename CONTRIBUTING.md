@@ -97,7 +97,7 @@
 	git fetch ls main # Bring changes only, so then you can do "git diff ...ls/main" (or git diff ..ls/main file-name) to see changes before doing "git merge ls main"
 	```
 
-	> :warning: In any case, all possible conflicts will have to be resolved. To delete all files detected as _deleted by us_ at once, you can use the following command:
+	> :warning: In any case, all possible conflicts will have to be resolved. To delete all unnedesary common files detected as _deleted by us_ at once, you can use the following command:
 
 	```bash
 	git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {} # Or its alias: grmu
@@ -150,7 +150,7 @@
 	git push origin v1.0.0 # Upload tags to remote (or `git push origin --tags` for uploading all unuploaded tags)
 	```
 
-	Then go to the repository page on GitHub, click on _Releases_ or _Tags_ section and, next to the tag you want to convert into a release, click on _Create release"_. Once there, fill out release information:
+	Then, go to the repository page on GitHub, click on _Releases_ or _Tags_ section and, next to the tag you want to convert into a release, click on _Create release_. Once there, fill out the release information:
 
 	- **Tag version**: Select the just uploaded tag.
 	- **Release title**: Set a title for the release.
@@ -167,7 +167,7 @@
 	git archive --o "$(basename "$(git rev-parse --show-toplevel)").zip" main # Or the more advanced (with smart folder creation, autoname & alias prone e.g. garc): p mkdir -p _releases && git archive -o _releases/$(basename "$(git rev-parse --show-toplevel)").zip main
 	```
 
-	> :memo: **Note:** To exclude some elements, create a .gitattributes file in the root of the script repo and put on it e.g.:
+	> :memo: **Note:** To exclude elements, create a .gitattributes file in the root of the script repo and put on it e.g.:
 
 	```
 	.gitattributes export-ignore
@@ -175,7 +175,7 @@
 	/.github export-ignore
 	```
 
-[^1]: Current development should be done in _dev_ branch and merged with _main_ once significant progress has been made and testes. But more on this later...
+[^1]: Current development should be done in _dev_ branch or derivates and merged with _main_ once significant progress has been made and testes. But more on this later...
 
 [^2]: `-b main` specifies the branch to clone (if omitted, the default one is cloned), `ls` is the name of repository's remote (or, if not applicable, its path) and, finally, `ls_my_script` is the name of the directory where the repository will be cloned.
 
