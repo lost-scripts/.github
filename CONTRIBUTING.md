@@ -108,7 +108,7 @@
 	> :warning: In any case, all possible conflicts will have to be resolved. To delete all unnedesary common files detected as _deleted by us_ at once, you can use the following command:
 
 	```bash
-	git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {} # Or its alias: grmu
+	git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {} # Or its alias: grdu
 	```
 
 * 2.2\. Create a new repository for the script on GitHub (or the service of your choice). Then, as usual, add it as remote named _origin_ and upload:
@@ -182,9 +182,7 @@
 	>/.github export-ignore
 	>```
 	><br>
-
 	
-
 [^1]: Current development should be done in _dev_ branch or derivates and merged with _main_ once significant progress has been made and testes. But more on this later...
 
 [^2]: `-b main` specifies the branch to clone (if omitted, the default one is cloned), `ls` is the name of repository's remote (or, if not applicable, its path) and, finally, `ls_my_script` is the name of the directory where the repository will be cloned.
