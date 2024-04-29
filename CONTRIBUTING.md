@@ -81,7 +81,7 @@
 	cd ../ls_my_script
 	git rm -r Modules # Should not using any of its contents, directly delete "Modules" folder
 	git rm Utility/ls_utilities_ext.lua # Delete only the unused ls_utilities_ext.lua
-	ln -s ./ScriptResources/ls_my_script/docs docs # Or: mklink /d docs .\ScriptResources\ls_my_script\docs from CMD for creating "docs" symlink
+	ln -s ./ScriptResources/ls_my_script/docs docs # If necessary (or: mklink /d docs .\ScriptResources\ls_my_script\docs for creating the symlink from CMD)
 	git add -A # Similarly to "addremove", adds (even untracked) & removes files (if necessary, use: git add -u instead to add only deleted files)
 	git commit -m "ls_my_script: Initial commit"
 	```
