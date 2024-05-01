@@ -1,3 +1,8 @@
+---
+ScriptBirth = "20240428-2142"
+ScriptBuild = "20240501-1555"
+---
+
 <h1 align="center">Lost Script Creation & Workflow</h1><br>
 
 ### 1\. Creating a new script
@@ -109,7 +114,7 @@
 	git fetch ls main # Bring changes only, so then you can do "git diff ...ls/main" (or git diff ..ls/main file-name) to see changes before doing "git merge ls main"
 	```
 
-	> :warning: In any case, all possible conflicts will have to be resolved. To delete all unnecesary common files detected as _deleted by us_ at once, you can use the following command:
+	> :warning: **Warning:** In any case, all possible conflicts will have to be resolved. To delete all unnecesary common files detected as _deleted by us_ at once, you can use the following command:
 
 	```bash
 	git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {} # Or its alias: grdu
@@ -196,7 +201,7 @@
 
 ### 4\. Pages Deployment
 
-* 4.1\. Any time GitHub Pages needs to be updated and assuming a dummy (since it should never be used to work on it) `gh-pages` branch exists, do:
+* 4.1\. Any time GitHub Pages needs to be updated and assuming a dummy `gh-pages` branch exists, do:
 
 	```bash
 	git checkout gh-pages
@@ -205,7 +210,9 @@
 	git checkout main # Return to main branch (or whichever you were) to avoid start working on gh-pages by mistake!
 	```
 
-	Alternatively, preferably indeed, one can just run the alias `deploy` and confirm. All this ensures deployments are only made when necessary and without having to worry at all about possible merge conflicts or whatever...
+	Alternatively, one can just use alias `deploy` and confirm. All this ensures deployments are only made when necessary and without having to worry at all about possible merge conflicts or whatever...
+
+	> :warning: **Warning:** That's all the `gh-pages` branch is for and no work should ever be done on it or it will be lost.
 
 <br>
 
