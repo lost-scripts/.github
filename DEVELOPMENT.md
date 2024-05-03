@@ -1,6 +1,6 @@
 ---
 ScriptBirth = "20240428-2142"
-ScriptBuild = "20240501-1555"
+ScriptBuild = "20240503-0447"
 ---
 
 <h1 align="center">Lost Script Creation & Workflow</h1><br>
@@ -19,8 +19,9 @@ ScriptBuild = "20240501-1555"
 		│
 		├───📂.git
 		│
-		├───📂.github
-		│   └───📂Docs
+		├───📂docs
+		│   │   index.htm
+		│   └───📂assets
 		│           README_icon.png
 		│           README_logo.png
 		│           README_overview_001.png
@@ -47,13 +48,13 @@ ScriptBuild = "20240501-1555"
 	</details>
 	<br>
 
-	And assuming it has a `main` and a `dev` branch [^1], proceed to make a clone of it (these relative paths assume you are executing the commands from the repo to clone) as follows:
+	And assuming it has a `main` and a `dev` branch [^1] as well as having set up the appropriate environment [^2], proceed to make a clone of it (these relative paths assume you are executing the commands from the repo to clone) as follows:
 
 	```bash
 	git clone --depth 1 -b ls_my_script file://D:/Rai/Projects/Moho/LS/ls ../ls_my_script # --depth requires such kind of absolute path
 	```
 
-	> :memo: **Note:** The purpose of not just using e.g. `git clone -b main ../ls ../ls_my_script` [^2] is limit history to the very last commit.  
+	> :memo: **Note:** The purpose of not just using e.g. `git clone -b main ../ls ../ls_my_script` [^3] is limit history to the very last commit.  
 
 	As for now, the remotes for the _ls_my_script_ repo should look like this:
 
@@ -210,14 +211,16 @@ ScriptBuild = "20240501-1555"
 	git checkout main # Return to main branch (or whichever you were) to avoid start working on gh-pages by mistake!
 	```
 
-	Alternatively, one can just use alias `deploy` and confirm. All this ensures deployments are only made when necessary and without having to worry at all about possible merge conflicts or whatever...
+	Alternatively, one can just use alias `deploy` and confirm. In any case, all this ensures deployments are only made when necessary and without having to worry about possible merge conflicts and such...
 
-	> :warning: **Warning:** That's all the `gh-pages` branch is for and no work should ever be done on it or it will be lost.
+	> :warning: **Warning:** That's all the `gh-pages` branch is for and no work should ever be done on it or it will be irremediably lost.
 
 <br>
 
-[^1]: Current development should be done in _dev_ branch or derivates and merged with _main_ once significant progress has been made and testes. But more on this later...
+[^1]: Current development should be done in _dev_ branch or derivates and merged with _main_ once significant progress has been made and tested. But more on this later...
 
-[^2]: `-b main` specifies the branch to clone (if omitted, the default one is cloned), `ls` is the name of repository's remote (or, if not applicable, its path) and, finally, `ls_my_script` is the name of the directory where the repository will be cloned.
+[^2]: Based on settings suggested by the [ENVIRONMENT.md](./blob/main/DEVELOPMENT.md) file. But more on this later too...
+
+[^3]: `-b main` specifies the branch to clone (if omitted, the default one is cloned), `ls` is the name of repository's remote (or, if not applicable, its path) and, finally, `ls_my_script` is the name of the directory where the repository will be cloned.
 
 [1]: <https://github.com/lost-scripts/ls> 'Go to "ls" super-repository on GitHub'
