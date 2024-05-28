@@ -1,11 +1,11 @@
 <sup><sub>
 ScriptBirth = "20240428-2142"
-ScriptBuild = "20240503-0457"
+ScriptBuild = "20240528-0251"
 </sub></sup>
 
-<h1 align="center">Lost Script Creation & Workflow</h1><br>
+<h1 align="center">Development</h1><br>
 
-### 1\. Creating a new script
+### 1\. Creating a new Lost Script
 
 * 1.1\. Starting from a kind of _super-repository_ _[ls][1]_ containing all project's common and shared files in e.g.:
  	<br>
@@ -48,7 +48,7 @@ ScriptBuild = "20240503-0457"
 	</details>
 	<br>
 
-	And assuming it has a `main` and a `dev` branch [^1] as well as having set up the appropriate environment [^2], proceed to make a clone of it (these relative paths assume you are executing the commands from the repo to clone) as follows:
+	And assuming it has a `main` and a `dev` branch [^1] and the appropriate environment [^2] has been set up, proceed to make a clone of it (these relative paths assume you are executing the commands from the repo to clone) as follows:
 
 	```bash
 	git clone --depth 1 -b ls_my_script file://D:/Rai/Projects/Moho/LS/ls ../ls_my_script # --depth requires such kind of absolute path
@@ -104,7 +104,7 @@ ScriptBuild = "20240503-0457"
 
 ---
 
-### 2\. The workflow
+### 2\. Workflow
 
 * 2.1\. Two ways for bringing changes in the _super-repo_ "ls" to the script repo:
 
@@ -200,9 +200,9 @@ ScriptBuild = "20240503-0457"
 
 ---
 
-### 4\. Pages Deployment
+### 4\. Pages deployment
 
-* 4.1\. Any time GitHub Pages needs to be updated and assuming a dummy `gh-pages` branch exists, do:
+* 4.1\. Any time GitHub Pages need to be updated and assuming a dummy `gh-pages` branch exists, do:
 
 	```bash
 	git checkout gh-pages
@@ -213,7 +213,7 @@ ScriptBuild = "20240503-0457"
 
 	Alternatively, one can just use alias `deploy` and confirm. In any case, all this ensures deployments are only made when necessary and without having to worry about possible merge conflicts and such...
 
-	> :warning: **Warning:** That's all the `gh-pages` branch is for and no work should ever be done on it or it will be irremediably lost.
+	> :warning: **Warning:** That's all the `gh-pages` branch is for and no work should ever be done on it or it will be irremediably lost!
 
 <br>
 
