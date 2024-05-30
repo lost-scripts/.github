@@ -1,6 +1,6 @@
 <sup><sub>
 ScriptBirth = "20240428-2142"
-ScriptBuild = "20240528-0251"
+ScriptBuild = "20240530-0531"
 </sub></sup>
 
 <h1 align="center">Development</h1><br>
@@ -48,13 +48,13 @@ ScriptBuild = "20240528-0251"
 	</details>
 	<br>
 
-	And assuming it has a `main` and a `dev` branch [^1] and the appropriate environment [^2] has been set up, proceed to make a clone of it (these relative paths assume you are executing the commands from the repo to clone) as follows:
+	And assuming it has a `main` and a `dev` branch [^1] plus, preferably, the appropriate environment [^2] has been set up, proceed to make a clone of it (these relative paths assume you are executing the commands from the repo to clone) as follows:
 
 	```bash
-	git clone --depth 1 -b ls_my_script file://D:/Rai/Projects/Moho/LS/ls ../ls_my_script # --depth requires such kind of absolute path
+	git clone --depth=1 -b main file://D:/Rai/Projects/Moho/LS/ls ../ls_my_script # --depth requires such kind of absolute path. If necessary, add `-b <branch>` in between for cloning a specific branch
 	```
 
-	> :memo: **Note:** The purpose of not just using e.g. `git clone -b main ../ls ../ls_my_script` [^3] is limit history to the very last commit.  
+	> :memo: **Note:** The purpose of not just using e.g. `git clone -b main ../ls ../ls_my_script` [^3] is limit history to the very last commit.
 
 	As for now, the remotes for the _ls_my_script_ repo should look like this:
 
@@ -99,6 +99,8 @@ ScriptBuild = "20240528-0251"
 	git branch -M main # Not necessary if you already use main...
 	git push -u origin main
 	```
+
+	> :memo: **Note:** Should git reject to push this kind of _shallow_ repos, try e.g. `git fetch --depth=2 ls main` to go incorporating commits from `ls` till, luckily, it work. Otherwise, you may have to end up doing a `git fetch --unshallow ls main` to bring the entire history after all...
 
 <br>
 

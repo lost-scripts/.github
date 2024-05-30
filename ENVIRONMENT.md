@@ -39,6 +39,7 @@ alias glall="git log --pretty=format: --name-only --diff-filter=A | sort - | sed
 alias gmv='git mv '
 alias grm='git rm '
 alias grmc='git rm --cached '
+alias gpullauh='git pull --allow-unrelated-histories' # merges histories of two projects that started their lives independently
 alias gr='git remote -v'
 alias grs='git remote set-url' # remote new-url
 alias gs='git status'
@@ -167,6 +168,7 @@ export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetu
 	lhist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
 	lad = log --all --decorate --oneline --graph
 	lall = log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d'
+	pullauh = pull --allow-unrelated-histories' # merges histories of two projects that started their lives independently
 	r = remote -v
 	rs = remote set-url # remote new-url
 	st = status
