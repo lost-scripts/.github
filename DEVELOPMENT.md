@@ -1,8 +1,3 @@
-<sup><sub>
-ScriptBirth = "20240428-2142"
-ScriptBuild = "20240530-0531"
-</sub></sup>
-
 <h1 align="center">Development</h1><br>
 
 ### 1\. Creating a new Lost Script
@@ -48,32 +43,24 @@ ScriptBuild = "20240530-0531"
 	</details>
 	<br>
 
-	And assuming it has a `main` and a `dev` branch [^1] plus, preferably, the appropriate environment [^2] has been set up, proceed to make a clone of it (these relative paths assume you are executing the commands from the repo to clone) as follows:
+	And assuming it has a `main` and a `dev` branch [^1] plus, preferably, the appropriate environment [^2] has been set up, proceed to make a clone of it (these relative paths assume you are executing the commands from the repo to clone [^3]) as follows:
 
 	```bash
-	git clone --depth=1 -b main file://D:/Rai/Projects/Moho/LS/ls ../ls_my_script # --depth requires such kind of absolute path. If necessary, add `-b <branch>` in between for cloning a specific branch
+	git clone . ../ls_my_script -o ls # Alternatives: `git clone ../ls ../ls_my_script -o ls` or `git clone -b <branch> . ../ls_my_script -o ls` (for cloning another branch than default/main). The `-o ls` is for directly renaming the remote `origin` to `ls`
 	```
 
-	> :memo: **Note:** The purpose of not just using e.g. `git clone -b main ../ls ../ls_my_script` [^3] is limit history to the very last commit.
+	> :memo: **Note:** Initially, recommendation was use `git clone --depth=1 -b main file://D:/Rai/Projects/Moho/LS/ls ../ls_my_script` (--depth requires such kind of absolute path) in order to limit history to the very last commit (resulting in a _shallow repo_), but turns out then Git rejects to push to a new repo, so ruled out as of today...
 
-	As for now, the remotes for the _ls_my_script_ repo should look like this:
+	As for now, the remotes for the _ls_my_script_ repo should look something like this:
 
 	```bash
+	cd ../ls_my_script
 	git remote -v
-	origin  file://D:/Rai/Projects/Moho/LS/ls (fetch)
-	origin  file://D:/Rai/Projects/Moho/LS/ls (push)
+	ls  file://D:/Rai/Projects/Moho/LS/ls/. (fetch)
+	ls  file://D:/Rai/Projects/Moho/LS/ls/. (push)
 	```
 
-	Rename it and, for convenience, **make its path relative**:
-
-	```bash
-	git remote rename origin ls
-	```
-	```bash
-	git remote set-url ls ../ls # Now the remote ls relatively points to the local super-repo "ls" 
-	```
-
-	So it end up looking like this:
+	Optionally, should for convenience you preferred a relative path, just use: `git remote set-url ls ../ls`, and the remote will end up as follows:
 
 	```bash
 	git remote -v
@@ -84,10 +71,9 @@ ScriptBuild = "20240530-0531"
 * 1.2\. From the new script repo, add the script's own files like _ls_my_script.lua_ and so, and **remove any shared files it may not need**, either by means of the explorer or the console, e.g.:
 
 	```bash
-	cd ../ls_my_script
+	rm -f docs; ln -s ScriptResources/ls_my_script/docs docs # Recreate "docs" symlink, also by the function `updatedocs ls_my_script (or delete it and from CMD: mklink /d docs ScriptResources\ls_my_script\docs)
 	git rm -r Modules # Should not using any of its contents, directly delete "Modules" folder
-	git rm Utility/ls_utilities_ext.lua # Delete only the unused ls_utilities_ext.lua
-	ln -s ScriptResources/ls_my_script/docs docs # If necessary (or: mklink /d docs ScriptResources\ls_my_script\docs for creating the symlink from CMD)
+	git rm Utility/ls_utilities_ext.lua # Delete e.g. only the unused ls_utilities_ext.lua
 	git add -A # Similarly to "addremove", adds (even untracked) & removes files (if necessary, use: git add -u instead to add only deleted files)
 	git commit -m "ls_my_script: Initial commit"
 	```
@@ -99,8 +85,6 @@ ScriptBuild = "20240530-0531"
 	git branch -M main # Not necessary if you already use main...
 	git push -u origin main
 	```
-
-	> :memo: **Note:** Should git reject to push this kind of _shallow_ repos, try e.g. `git fetch --depth=2 ls main` to go incorporating commits from `ls` till, luckily, it work. Otherwise, you may have to end up doing a `git fetch --unshallow ls main` to bring the entire history after all...
 
 <br>
 
