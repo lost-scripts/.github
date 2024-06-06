@@ -11,10 +11,10 @@ all copies or substantial portions of the Software.
 * The distribution, publication, sublicensing, and/or sale of the Software,
 are strictly prohibited without express permission from the copyright holder.
 
-* Scripting works derived from the Software may be distributed or sold under
-licensee's own terms, provided that such works do not contain the original
-Software in its entirety and they will not overwrite any part of the Software
-upon general installation (e.g., for using "LS" instead of its own identifier).
+* Derivative works may be distributed or sold under licensee's own terms,
+provided that such works do not contain the original Software in its entirety
+and they will not overwrite any part of the Software upon coexisting public
+installations (e.g., for using "LS" instead of licensee's own identifier).
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
