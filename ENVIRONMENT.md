@@ -25,6 +25,9 @@ alias gdumb='cat-file -p'
 alias gco='git checkout'
 alias gc='git commit -m'
 #alias gdeploy='git checkout pages && git reset --hard main && git push origin pages -f' # Use function below instead
+alias gdc='git diff --cached'
+alias gdprev='git diff main..origin/main' # Preview diffs of changes
+alias gdiff='git diff --word-diff'
 alias gdir='git rev-parse --git-dir'
 alias gd='git rev-parse --absolute-git-dir'
 #alias gud='unset GIT_DIR' # Use function below instead
@@ -35,14 +38,15 @@ alias gf='git fetch'
 alias gfdiff='git fetch && git diff HEAD..@{u}' # Only see the changes that would come with git pull
 alias gl='git log --graph --pretty=oneline --abbrev-commit --decorate # nice log output'
 alias glhist="git log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
+alias glprev='git log main..origin/main' # Preview commit logs of changes
 alias glad='git log --all --decorate --oneline --graph'
 alias glall="git log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d'"
 alias gmv='git mv '
 alias grm='git rm '
 alias grmc='git rm --cached '
-alias gpullauh='git pull --allow-unrelated-histories' # merges histories of two projects that started their lives independently
+alias gpullauh='git pull --allow-unrelated-histories' # Merges histories of two projects that started their lives independently
 alias gr='git remote -v'
-alias grs='git remote set-url' # remote new-url
+alias grs='git remote set-url' # Remote new-url
 alias gs='git status'
 alias gsu='git status -u'
 alias gsuno='git status -uno'
@@ -122,6 +126,11 @@ function deploy() { # GitHub Pages deployment using 'gh-pages' branch just for t
 	fi
 }
 
+function updatedocs() {
+  rm -f docs
+  ln -s ScriptResources/"$1"/docs docs
+}
+
 #function post_worktree() { cd "$1" && ./.git/hooks/post-worktree.sh }
 
 
@@ -146,8 +155,8 @@ export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetu
 	symlinks = true
 	excludesfile = C:\\Users\\Ramon0\\.gitignore
 [user]
-	#email = lorem.ipsum@outlook.com
-	#name = Lorem
+	email = rai.lopez@outlook.com
+	name = Rai
 [alias]
 	a = add
 	aa = add .
@@ -163,16 +172,18 @@ export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetu
 	ci = commit
 	#deploy ='git checkout pages && git reset --hard main && git push origin pages -f' # Use the function below instead
 	dc = diff --cached
+	dprev = diff main..origin/main # Preview diffs of changes
 	diff = diff --word-diff
 	ft = fetch
 	ftdiff = !git fetch && git diff HEAD..@{u} # Only see the changes that would come with git pull
-	lg = log --graph --pretty=oneline --abbrev-commit --decorate # nice log output
+	lg = log --graph --pretty=oneline --abbrev-commit --decorate # Nice log output
 	lhist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+	lprev = log main..origin/main # Preview commit logs of changes
 	lad = log --all --decorate --oneline --graph
 	lall = log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d'
-	pullauh = pull --allow-unrelated-histories' # merges histories of two projects that started their lives independently
+	pullauh = git pull --allow-unrelated-histories # Merges histories of two projects that started their lives independently
 	r = remote -v
-	rs = remote set-url # remote new-url
+	rs = remote set-url # Remote new-url
 	st = status
 	stu = status -u
 
