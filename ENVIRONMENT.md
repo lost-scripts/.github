@@ -32,6 +32,7 @@ alias gw='git rev-parse --show-toplevel'
 #alias guw='unset GIT_WORK_TREE' # Use function below instead
 alias gdw='git rev-parse --absolute-git-dir && git rev-parse --show-toplevel'
 alias gf='git fetch'
+alias gfdiff='git fetch && git diff HEAD..@{u}' # Only see the changes that would come with git pull
 alias gl='git log --graph --pretty=oneline --abbrev-commit --decorate # nice log output'
 alias glhist="git log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
 alias glad='git log --all --decorate --oneline --graph'
@@ -163,7 +164,8 @@ export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetu
 	#deploy ='git checkout pages && git reset --hard main && git push origin pages -f' # Use the function below instead
 	dc = diff --cached
 	diff = diff --word-diff
-	ft  = fetch
+	ft = fetch
+	ftdiff = !git fetch && git diff HEAD..@{u} # Only see the changes that would come with git pull
 	lg = log --graph --pretty=oneline --abbrev-commit --decorate # nice log output
 	lhist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
 	lad = log --all --decorate --oneline --graph
