@@ -68,10 +68,18 @@
 	ls  ../ls (push)
 	```
 
-* 1.2\. From the new script repo, add the script's own files like _ls_my_script.lua_ and so, and **remove any shared files it may not need**, either by means of the explorer or the console, e.g.:
+* 1.2\. From the new script repo **root** (otherwise suggested paths won't match), update symlinks, add script's own files and, if necesssary, remove unnecesary stuff:
+
+	Update symlinks by simply running the function `updateall ls_my_script` or manually:
 
 	```bash
 	rm -f docs; ln -s ScriptResources/ls_my_script/docs docs # Recreate "docs" symlink, also by the function `updatedocs ls_my_script (or delete it and from CMD: mklink /d docs ScriptResources\ls_my_script\docs)
+ 	rm -f ScriptResources/ls_my_script/ScriptResources; ln -s ../../ScriptResources ScriptResources/ls/ScriptResources # Recreate "ScriptResources" symlink, also by the function `updatesr ls_my_script (or delete it and from CMD: mklink /d ScriptResources\ls_my_script\ScriptResources ..\..\ScriptResources)
+ 	```
+ 
+	Add the script's own files like _ls_my_script.lua_ and so, and **remove any shared files it may not need**, either by means of the explorer or the console, e.g.:
+
+ 	```bash
 	git rm -r Modules # Should not using any of its contents, directly delete "Modules" folder
 	git rm Utility/ls_utilities_ext.lua # Delete e.g. only the unused ls_utilities_ext.lua
 	git add -A # Similarly to "addremove", adds (even untracked) & removes files (if necessary, use: git add -u instead to add only deleted files)
