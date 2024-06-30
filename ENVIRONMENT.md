@@ -131,6 +131,18 @@ function updatedocs() {
   ln -s ScriptResources/"$1"/docs docs
 }
 
+function updatesr() {
+  rm -f ScriptResources/"$1"/ScriptResources
+  ln -s ../../ScriptResources ScriptResources/"$1"/ScriptResources
+}
+
+function updateall() {
+  rm -f docs
+  ln -s ScriptResources/"$1"/docs docs
+  rm -f ScriptResources/"$1"/ScriptResources
+  ln -s ../../ScriptResources ScriptResources/"$1"/ScriptResources
+}
+
 #function post_worktree() { cd "$1" && ./.git/hooks/post-worktree.sh }
 
 
