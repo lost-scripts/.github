@@ -111,11 +111,14 @@ function repo() {
 
 function deploy() { # GitHub Pages deployment using 'gh-pages' branch just for that...
 	echo "WARNING: Branch 'gh-pages' will be overwritten locally and remotely!"
-	read -p "Are you sure you want to deploy Pages? (y/n) " -n 1 -r
+	read -p "Are you sure you want to commit all changes and deploy Pages? (y/n) " -n 1 -r
 	echo # (optional) move to a new line
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
 		current_branch=$(git branch --show-current)
+		#cp -f README.md docs/index.html # Copy & Rename Method (3 lines): Copy README.md and paste it as index.html in docs folder
+		#git add -A # Stage all changes (instead of: git add docs/index.html?)
+		#git commit -m "Predeployment commit: ensure main has index.html current contents" 
 		git checkout gh-pages
 		git reset --hard main
 		git push origin gh-pages -f
@@ -127,20 +130,21 @@ function deploy() { # GitHub Pages deployment using 'gh-pages' branch just for t
 }
 
 function updatedocs() {
-  rm -f docs
-  ln -s ScriptResources/"$1"/docs docs
+	rm -f docs; ln -s ScriptResources/"$1"/docs docs
+}
+
+function updatereadme() {
+	rm -f README.md; ln -s ScriptResources/"$1"/index.html README.md
 }
 
 function updatesr() {
-  rm -f ScriptResources/"$1"/ScriptResources
-  ln -s ../../ScriptResources ScriptResources/"$1"/ScriptResources
+	rm -f ScriptResources/"$1"/ScriptResources; ln -s ../../ScriptResources ScriptResources/"$1"/ScriptResources
 }
 
 function updateall() {
-  rm -f docs
-  ln -s ScriptResources/"$1"/docs docs
-  rm -f ScriptResources/"$1"/ScriptResources
-  ln -s ../../ScriptResources ScriptResources/"$1"/ScriptResources
+	rm -f docs; ln -s ScriptResources/"$1"/docs docs
+	rm -f README.md; ln -s ScriptResources/"$1"/index.html README.md
+	#rm -f ScriptResources/"$1"/ScriptResources; ln -s ../../ScriptResources ScriptResources/"$1"/ScriptResources
 }
 
 #function post_worktree() { cd "$1" && ./.git/hooks/post-worktree.sh }
@@ -150,7 +154,7 @@ function updateall() {
 # Other... #
 ############
 
-export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetually
+#export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetually
 
 
 ##############
