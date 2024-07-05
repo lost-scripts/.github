@@ -1,6 +1,6 @@
 <sup><sub>
 ScriptBirth = "20240428-2142"
-ScriptBuild = "20240503-0459"
+ScriptBuild = "20240705-1534"
 </sub></sup>
 
 # .bashrc
@@ -130,21 +130,33 @@ function deploy() { # GitHub Pages deployment using 'gh-pages' branch just for t
 }
 
 function updatedocs() {
+	prev_msys=$MSYS
+	export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows (if run as admin or in developer mode)
 	rm -f docs; ln -s ScriptResources/"$1"/docs docs
+	export MSYS=$prev_msys
 }
 
 function updatereadme() {
+	prev_msys=$MSYS
+	export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows (if run as admin or in developer mode)
 	rm -f README.md; ln -s ScriptResources/"$1"/index.html README.md
+	export MSYS=$prev_msys
 }
 
-function updatesr() {
+function updatesres() {
+	prev_msys=$MSYS
+	export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows (if run as admin or in developer mode)
 	rm -f ScriptResources/"$1"/ScriptResources; ln -s ../../ScriptResources ScriptResources/"$1"/ScriptResources
+	export MSYS=$prev_msys
 }
 
 function updateall() {
+	prev_msys=$MSYS
+	export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows (if run as admin or in developer mode)
 	rm -f docs; ln -s ScriptResources/"$1"/docs docs
 	rm -f README.md; ln -s ScriptResources/"$1"/index.html README.md
 	#rm -f ScriptResources/"$1"/ScriptResources; ln -s ../../ScriptResources ScriptResources/"$1"/ScriptResources
+	export MSYS=$prev_msys
 }
 
 #function post_worktree() { cd "$1" && ./.git/hooks/post-worktree.sh }
@@ -154,7 +166,7 @@ function updateall() {
 # Other... #
 ############
 
-#export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetually
+#export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetually (commented due to it causes tab problems afterwards)
 
 
 ##############
