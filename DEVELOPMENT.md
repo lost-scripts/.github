@@ -68,7 +68,7 @@
 	ls  ../ls (push)
 	```
 
-* 1.2\. From the new script repo **root** (otherwise suggested paths won't match), update symlinks, add script's own files and, if necesssary, remove unnecesary stuff:
+* 1.2\. From the **root** of the new repo (otherwise suggested paths should be adjusted in consequence), update symlinks, add script's own files and, if apply, remove unnecesary stuff:
 
 	Update symlinks by simply running the function `updateall ls_my_script` or manually:
 
@@ -78,7 +78,7 @@
 	#UNNECESARY? rm -f ScriptResources/ls_my_script/ScriptResources; ln -s ../../ScriptResources ScriptResources/ls/ScriptResources # Recreate "ScriptResources" symlink, also by the function `updatesr ls_my_script (or delete it and from CMD: mklink /d ScriptResources\ls_my_script\ScriptResources ..\..\ScriptResources)
  	```
  
-	Add the script's own files like _ls_my_script.lua_ and so, and **remove any shared files it may not need**, either by means of the explorer or the console, e.g.:
+	Add the script's own files like _ls_my_script.lua_ and so, and (recomendably) **remove any shared files the new script may not need**, either by means of the explorer or the console, e.g.:
 
  	```bash
 	git rm -r Modules # Should not using any of its contents, directly delete "Modules" folder
