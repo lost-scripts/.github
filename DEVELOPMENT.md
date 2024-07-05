@@ -74,7 +74,8 @@
 
 	```bash
 	rm -f docs; ln -s ScriptResources/ls_my_script/docs docs # Recreate "docs" symlink, also by the function `updatedocs ls_my_script (or delete it and from CMD: mklink /d docs ScriptResources\ls_my_script\docs)
- 	rm -f ScriptResources/ls_my_script/ScriptResources; ln -s ../../ScriptResources ScriptResources/ls/ScriptResources # Recreate "ScriptResources" symlink, also by the function `updatesr ls_my_script (or delete it and from CMD: mklink /d ScriptResources\ls_my_script\ScriptResources ..\..\ScriptResources)
+	rm -f README.md; ln -s ScriptResources/ls_my_script/index.html README.md # Recreate "README.md" symlink, also by the function `updatereadme ls_my_script (or delete it and from CMD: mklink README.md ScriptResources\ls_my_script\docs\index.html)
+	#UNNECESARY? rm -f ScriptResources/ls_my_script/ScriptResources; ln -s ../../ScriptResources ScriptResources/ls/ScriptResources # Recreate "ScriptResources" symlink, also by the function `updatesr ls_my_script (or delete it and from CMD: mklink /d ScriptResources\ls_my_script\ScriptResources ..\..\ScriptResources)
  	```
  
 	Add the script's own files like _ls_my_script.lua_ and so, and **remove any shared files it may not need**, either by means of the explorer or the console, e.g.:
