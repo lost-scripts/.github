@@ -1,8 +1,3 @@
-<sup><sub>
-ScriptBirth = "20240428-2142"
-ScriptBuild = "20240705-1534"
-</sub></sup>
-
 # .bashrc
 ```sh
 #######################

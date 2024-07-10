@@ -70,15 +70,14 @@
 
 * 1.2\. From the **root** of the new repo (otherwise suggested paths should be adjusted in consequence), update symlinks, add script's own files and, if apply, remove unnecesary stuff:
 
-	Update symlinks by simply running the function `updateall ls_my_script` or manually (although Bash may require to run `export MSYS=winsymlinks:nativestrict` before):
+	Update symlinks by simply running the function `updateall ls_my_script` or manually (although Bash may require to run `export MSYS=winsymlinks:nativestrict` before) by:
 
 	```bash
 	rm -f docs; ln -s ScriptResources/ls_my_script/docs docs # Recreate "docs" symlink, also by the function `updatedocs ls_my_script (or delete it and from CMD: mklink /d docs ScriptResources\ls_my_script\docs)
-	rm -f README.md; ln -s ScriptResources/ls_my_script/index.html README.md # Recreate "README.md" symlink, also by the function `updatereadme ls_my_script (or delete it and from CMD: mklink README.md ScriptResources\ls_my_script\docs\index.html)
-	#UNNECESARY? rm -f ScriptResources/ls_my_script/ScriptResources; ln -s ../../ScriptResources ScriptResources/ls/ScriptResources # Recreate "ScriptResources" symlink, also by the function `updateres ls_my_script (or delete it and from CMD: mklink /d ScriptResources\ls_my_script\ScriptResources ..\..\ScriptResources)
+	rm -f README.md; ln -s ScriptResources/ls_my_script/docs/index.html README.md # Recreate "README.md" symlink, also by the function `updatereadme ls_my_script (or delete it and from CMD: mklink README.md ScriptResources\ls_my_script\docs\index.html)
  	```
  
-	Add the script's own files like _ls_my_script.lua_ and so, and (recomendably) **remove any shared files the new script may not need**, either by means of the explorer or the console, e.g.:
+	Add the script's own files like _ls_my_script.lua_ and so, and (recomendably) **remove any shared files the new script may not need**, either via the explorer or the console, e.g.:
 
  	```bash
 	git rm -r Modules # Should not using any of its contents, directly delete "Modules" folder
@@ -197,7 +196,7 @@
 
 ### 4\. Pages deployment
 
-* 4.1\. Any time GitHub Pages need to be updated and assuming a dummy `gh-pages` branch exists, do:
+* 4.1\. Any time GitHub Pages need to be updated and assuming a dummy `gh-pages` branch already exists (otherwise create it with: `git branch gh-pages`), do:
 
 	```bash
 	git checkout gh-pages
@@ -206,7 +205,7 @@
 	git checkout main # Return to main branch (or whichever you were) to avoid start working on gh-pages by mistake!
 	```
 
-	Alternatively, one can just use alias `deploy` and confirm. In any case, all this ensures deployments are only made when necessary and without having to worry about possible merge conflicts and such...
+	Alternatively, one can just use alias `deploy` and confirm. In any case, all this ensures deployments are only made when necessary and without having to worry about possible merge conflicts and such... By design, ___index.htm___ is actually the script's README, but you can always create a next-to-it ___index.html___ to get rid of this dependency.
 
 	> :warning: **Warning:** That's all the `gh-pages` branch is for and no work should ever be done on it or it will be irremediably lost!
 
