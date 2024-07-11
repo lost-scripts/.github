@@ -307,3 +307,81 @@ _[Tt]mp.txt
 _TODO.txt
 _[Tt]odo.txt
 ```
+
+# hooks
+
+## pre-commit
+
+```sh
+#!/bin/sh
+# pre-commit hook script for reliably update *.lua files ScriptBuild variable
+
+# Define the pattern to search for and the new build date
+pattern="^ScriptBuild ="
+new_build_date=$(date +"%Y%m%d-%H%M")
+
+# Loop through all staged Lua files
+git diff --cached --name-only | grep '\.lua$' | while IFS= read -r file; do
+	# Check if the file contains the ScriptBuild line within the first 10 lines
+	if head -n 10 "$file" | grep -m 1 -q "$pattern"; then
+		# Determine the directory of the file
+		file_dir=$(dirname "$file")
+
+		# Find or create the backup directory
+		backup_dir=$(find "$file_dir" -maxdepth 1 -type d \( -name '_arc*' -o -name '_archive' \) | head -n 1)
+		if [ -z "$backup_dir" ]; then
+			backup_dir="$file_dir/_archive"
+			mkdir -p "$backup_dir" || backup_dir="$file_dir"
+		fi
+
+		# Update the ScriptBuild line and create a backup in the specified directory
+		sed -i.bak "s/$pattern .*/ScriptBuild = \"$new_build_date\"/" "$file"
+		# Convert LF to CRLF
+		awk '{printf "%s\r\n", $0}' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+		# Move the backup file to the backup directory
+		mv "$file.bak" "$backup_dir/"
+
+		# Validate, by simple check, the file integrity?
+		#if ! grep -q "$pattern" "$file"; then
+			#echo "Error: File integrity check failed for $file"
+			#exit 1
+		#fi
+
+		# Add the modified file to the staging area
+		git add "$file"
+	fi
+done
+```
+
+## post-commit
+
+```sh
+#!/bin/sh
+# post-commit hook script for writing reliable ScriptBuild based *.lua.log files
+
+# Define the pattern to search for
+pattern="^ScriptBuild ="
+
+# Loop through all committed Lua files
+git diff-tree --no-commit-id --name-only -r HEAD | grep '\.lua$' | while IFS= read -r file; do
+	# Check if the file contains the ScriptBuild line within the first 10 lines
+	if head -n 10 "$file" | grep -m 1 -q "$pattern"; then
+		# Get the commit message
+		commit_message=$(git log -1 --pretty=%B)
+		# Get the commit hash
+		commit_hash=$(git log -1 --pretty=%h)
+		# Get the modification date of the file
+		mod_date=$(date -r "$file" +"%Y%m%d-%H%M")
+		# Create or update the log file
+		log_file="${file}.log"
+		# Ensure the log file exists
+		touch "$log_file"
+		# Prepend the new entry to the log file
+		echo "$mod_date ($commit_hash): $commit_message" | cat - "$log_file" > "${log_file}.tmp" && mv "${log_file}.tmp" "$log_file"
+		# Mark the log file as hidden on Windows?
+		#if [ "$(uname -o)" = "Msys" ]; then
+			#attrib +h "$log_file"
+		#fi
+	fi
+done
+```
