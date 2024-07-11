@@ -33,6 +33,7 @@ alias gf='git fetch'
 alias gfdiff='git fetch && git diff HEAD..@{u}' # Only see the changes that would come with git pull
 alias gl='git log --graph --pretty=oneline --abbrev-commit --decorate # nice log output'
 alias glhist="git log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
+alias glrai="git log --date-order --date=iso --graph --full-history --all --pretty=format:'%x08%x09%C(red)%h %C(cyan)%ai%x08%x08%x08%x08%x08%x08%x08%x08%x08%C(reset) %C(bold green)(%ar%x08%x08%x08%x08)%C(reset) %C(yellow)%aN:%C(reset)%C(bold yellow)%d %C(reset)%s'"
 alias glprev='git log main..origin/main' # Preview commit logs of changes
 alias glad='git log --all --decorate --oneline --graph'
 alias glall="git log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d'"
@@ -201,6 +202,7 @@ function updateall() {
 	ftdiff = !git fetch && git diff HEAD..@{u} # Only see the changes that would come with git pull
 	lg = log --graph --pretty=oneline --abbrev-commit --decorate # Nice log output
 	lhist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+	lrai = log --date-order --date=iso --graph --full-history --all --pretty=format:'%x08%x09%C(red)%h %C(cyan)%ai%x08%x08%x08%x08%x08%x08%x08%x08%x08%C(reset) %C(bold green)(%ar%x08%x08%x08%x08)%C(reset) %C(yellow)%aN:%C(reset)%C(bold yellow)%d %C(reset)%s'
 	lprev = log main..origin/main # Preview commit logs of changes
 	lad = log --all --decorate --oneline --graph
 	lall = log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d'
