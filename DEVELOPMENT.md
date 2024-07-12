@@ -4,8 +4,10 @@
 
 * 1.1\. Starting from a kind of _super-repository_ _[ls][1]_ containing all project's common and shared files in e.g.:
  	<br>
+	<dl><dd>
 	<details>
-		<summary>D:/Rai/Projects/Moho/LS/ (Click to expand)</summary>
+		<summary><b>D:/Rai/Projects/Moho/LS/</b> (Click to expand)</summary>
+ 		<br>
 
 		📂ls
 		│   📄.gitattributes
@@ -23,7 +25,6 @@
 		│           📄ls_webpage.lua
 		│
 		├───📂Modules
-		│       📄ls_gui.lua
 		│       📄ls_modules.lua
 		│
 		├───📂ScriptResources
@@ -44,7 +45,7 @@
 		└───📂Utility
 				📄ls_utilities.lua
 	</details>
-	<br>
+	</dd></dl>
 
 	And assuming it has a `main` and a `dev` branch [^1] plus, preferably, the appropriate environment [^2] has been set up, proceed to make a clone of it (these relative paths assume you are executing the commands from the repo to clone [^3]) as follows:
 
@@ -90,6 +91,32 @@
 	git commit -m "ls_my_script: Initial commit"
 	```
 
+	Lastly, make sure the _.gitattributes_ file counts with the lines listed bellow:
+ 	<br>
+	<dl><dd>
+	<details>
+		<summary><b>.gitattributes</b> (Click to expand)</summary>
+ 		<br>
+
+		.gitattributes merge=ours
+		.gitignore merge=ours
+		README.md merge=ours
+		LICENSE.md merge=ours
+		/docs merge=ours
+		/ScriptResources/ls/docs merge=ours
+
+		.gitattributes export-ignore
+		.gitignore export-ignore
+		LICENSE.md export-ignore
+		README.md export-ignore
+		/.github export-ignore
+		/docs export-ignore
+		/ScriptResources/ls/docs export-ignore
+
+	> :memo: **Note:** In the first block, `merge=ours` strategy is applied to those files in common which modified contents must prevail over the ones in the super-repo. In the second, `export-ignore` is applied to elements that must be excluded from [releases](#3-making-a-release).
+	</details>
+	</dd></dl>
+
 * 1.3\. Now your script repository is ready for start working locally. To host it on GitHub (or the service of your choice), create a namesake repository there and follow the suggested instructions:
 
 	```bash
@@ -114,18 +141,7 @@
 
 ### 2\. Workflow
 
-* 2.1\. Assuming a _.gitattibutes_ file in the root of the script repo with the necessary lines to indicate that contents of its own files in common must prevail over those in the _super-repo_:
-
-	```
-	.gitattributes merge=ours
-	.gitignore merge=ours
-	README.md merge=ours
-	LICENSE.md merge=ours
-	/docs merge=ours
-	/ScriptResources/ls/docs merge=ours
-	```
-
-	The are basically two ways for bringing changes in the _super-repo_ "ls" to the script repo:
+* 2.1\. The are basically two ways for bringing changes in the _super-repo_ "ls" to the script repo:
 
 	```bash
 	git pull ls main # Bring changes and merge all at once (recommended)
@@ -188,19 +204,6 @@
 	```bash
 	git archive --o "$(basename "$(git rev-parse --show-toplevel)").zip" main # Or the more advanced (with smart folder creation, autoname & alias prone e.g. garc): p mkdir -p _releases && git archive -o _releases/$(basename "$(git rev-parse --show-toplevel)").zip main
 	```
-
-	> :memo: **Note:** To exclude elements, make sure they are added to the script repo's _.gitattributes_ file following of `export-ignore`, e.g.:
-	>```
-	>.gitattributes export-ignore
-	>.gitignore export-ignore
-	>LICENSE.md export-ignore
-	>README.md export-ignore
-	>/.github export-ignore
-	>/docs export-ignore
-	>/ScriptResources/ls/docs export-ignore
-	>```
-	><br>
-
 <br>
 
 ---
