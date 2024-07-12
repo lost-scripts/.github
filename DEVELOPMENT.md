@@ -8,38 +8,41 @@
 		<summary>D:/Rai/Projects/Moho/LS/ (Click to expand)</summary>
 
 		📂ls
-		│   .gitattributes
-		│   .gitignore
-		│   README.md
+		│   📄.gitattributes
+		│   📄.gitignore
+		│   🔗README.md (ScriptResources/ls/docs/index.htm)
 		│
 		├───📂.git
 		│
-		├───📂docs
-		│   │   index.htm
-		│   └───📂assets
-		│           README_icon.png
-		│           README_logo.png
-		│           README_overview_001.png
+		├───🔗docs (ScriptResources/ls/docs)
 		│
 		├───📂Menu
-		│   │   ls_separator.lua
+		│   │   📄ls_separator.lua
 		│   │
 		│   └───📂- Lost Scripts
-		│           ls_webpage.lua
+		│           📄ls_webpage.lua
 		│
 		├───📂Modules
-		│       ls_gui.lua
-		│       ls_modules.lua
+		│       📄ls_gui.lua
+		│       📄ls_modules.lua
 		│
 		├───📂ScriptResources
 		│   └───📂ls
-		│           logo.png
+		│       └───📂docs
+		│               📄index.css
+		│               📄index.htm
+		│               📄index.html
+		│               📄index.js
+		│               🖼index_favicon.svg
+		│               🖼index_...
+		│
+		│           🖼logo.png
 		│
 		├───📂Tool
-		│       _tool_list_ls.txt
+		│       📄_tool_list_ls.txt
 		│
 		└───📂Utility
-				ls_utilities.lua
+				📄ls_utilities.lua
 	</details>
 	<br>
 
@@ -68,7 +71,7 @@
 	ls  ../ls (push)
 	```
 
-* 1.2\. From the **root** of the new repo (otherwise suggested paths should be adjusted in consequence), update symlinks, add script's own files and, if apply, remove unnecesary stuff:
+* 1.2\. From the **root** of the new repo (otherwise suggested paths should be adjusted in consequence), update symlinks, add script's own files and, if apply, remove unnecesary stuff it may not need:
 
 	Update symlinks by simply running the function `updateall ls_my_script` or manually (although Bash may require to run `export MSYS=winsymlinks:nativestrict` before) by:
 
@@ -87,7 +90,7 @@
 	git commit -m "ls_my_script: Initial commit"
 	```
 
-* 1.3\. Now your script repository is ready for start working locally. To host it on GitHub, create a namesake repository there and follow the suggested instructions:
+* 1.3\. Now your script repository is ready for start working locally. To host it on GitHub (or the service of your choice), create a namesake repository there and follow the suggested instructions:
 
 	```bash
 	git remote add origin https://github.com/lost-scripts/ls_my_script.git
@@ -95,35 +98,7 @@
 	git push -u origin main
 	```
 
-<br>
-
----
-
-### 2\. Workflow
-
-* 2.1\. Two ways for bringing changes in the _super-repo_ "ls" to the script repo:
-
-	```bash
-	git pull ls main # Bring changes and merge all at once (recommended)
-	```
-	```bash
-	git fetch ls main # Bring changes only, so then you can do "git diff ...ls/main" (or git diff ..ls/main file-name) to see changes before doing "git merge ls main"
-	```
-
-	> :warning: **Warning:** In any case, all possible conflicts will have to be resolved. To delete all unnecesary common files detected as _deleted by us_ at once, you can use the following command:
-
-	```bash
-	git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {} # Or its alias: grdu
-	```
-
-* 2.2\. Create a new repository for the script on GitHub (or the service of your choice). Then, as usual, add it as remote named _origin_ and upload:
-
-	```bash
-	git remote add origin https://github.com/lost-scripts/ls_my_script.git
-	git push -u origin main
-	```
-
-	The script's remotes should look like this:
+	After that, remotes for the script should look like this:
 
 	```bash
 	git remote -v # Example of how the remotes would look like:
@@ -133,7 +108,38 @@
 	origin  https://github.com/lost-scripts/ls_my_script.git (push)
 	```
 
-* 2.3\. Before uploading local changes to the remote, it's always advisable to make sure that the script repo is up to date:
+<br>
+
+---
+
+### 2\. Workflow
+
+* 2.1\. Assuming a _.gitattibutes_ file in the root of the script repo with the necessary lines to indicate that contents of its own files in common must prevail over those in the _super-repo_:
+
+	```
+	.gitattributes merge=ours
+	.gitignore merge=ours
+	README.md merge=ours
+	LICENSE.md merge=ours
+	/docs merge=ours
+	/ScriptResources/ls/docs merge=ours
+	```
+
+	The are basically two ways for bringing changes in the _super-repo_ "ls" to the script repo:
+
+	```bash
+	git pull ls main # Bring changes and merge all at once (recommended)
+	```
+	```bash
+	git fetch ls main # Bring changes only, so then you can do "git diff ...ls/main" (or git diff ..ls/main file-name) to see changes before doing "git merge ls main"
+	```
+
+	> :warning: **Warning:** In any case, all possible conflicts will have to be resolved. To delete all unnecesary common files detected as _deleted by us_ at once, you can make use the following command:
+	>```bash
+	>git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {} # Or its alias: grdu
+	>```
+
+* 2.2\. Before uploading local changes to the remote, it's always advisable to make sure that the script repo is up to date:
 
 	```bash
 	git pull origin main # To bring any possible changes from the script repo on GitHub
@@ -143,13 +149,13 @@
 	git pull ls main # To bring any possible changes in common/shared files from an up-to-date local super-repo "ls"
 	```
 
-* 2.4\. Now, local changes can be pushed safely to the remote repository of the script on GitHub as usually:
+* 2.3\. Now, local changes can be pushed safely to the remote repository of the script on GitHub as usually:
 
 	```bash
 	git push origin main
 	```
 
-	> :memo: **Note:** When the time comes to create a release, finish off the `.github/README.md` file and export it so that the resulting HTML file end up like this: `ScriptResources/ls_my_script/README.html`.
+	> :memo: **Note:** When the time comes to create a release, finish off the `docs/index.htm` file in order to `README.md` is up to date (since it is actually a symlink) and everything ready for [Pages deployment](#4-pages-deployment).
 
 <br>
 
@@ -183,11 +189,15 @@
 	git archive --o "$(basename "$(git rev-parse --show-toplevel)").zip" main # Or the more advanced (with smart folder creation, autoname & alias prone e.g. garc): p mkdir -p _releases && git archive -o _releases/$(basename "$(git rev-parse --show-toplevel)").zip main
 	```
 
-	> :memo: **Note:** To exclude elements, create a .gitattributes file in the root of the script repo and put on it e.g.:
+	> :memo: **Note:** To exclude elements, make sure they are added to the script repo's _.gitattributes_ file following of `export-ignore`, e.g.:
 	>```
 	>.gitattributes export-ignore
 	>.gitignore export-ignore
+	>LICENSE.md export-ignore
+	>README.md export-ignore
 	>/.github export-ignore
+	>/docs export-ignore
+	>/ScriptResources/ls/docs export-ignore
 	>```
 	><br>
 
