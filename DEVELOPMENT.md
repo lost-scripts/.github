@@ -73,8 +73,9 @@
 	Update symlinks by simply running the function `updateall ls_my_script` or manually (although Bash may require to run `export MSYS=winsymlinks:nativestrict` before) by:
 
 	```bash
-	rm -f docs; ln -s ScriptResources/ls_my_script/docs docs # Recreate "docs" symlink, also by the function `updatedocs ls_my_script (or delete it and from CMD: mklink /d docs ScriptResources\ls_my_script\docs)
-	rm -f README.md; ln -s ScriptResources/ls_my_script/docs/index.html README.md # Recreate "README.md" symlink, also by the function `updatereadme ls_my_script (or delete it and from CMD: mklink README.md ScriptResources\ls_my_script\docs\index.html)
+	rm -f docs; ln -s ScriptResources/ls_my_script/docs docs # Recreate "docs" symlink, also by the function `updatedocs ls_my_script` (or delete it and from CMD: mklink /d docs ScriptResources\ls_my_script\docs)
+	rm -f README.md; ln -s ScriptResources/ls_my_script/docs/index.html README.md # Recreate "README.md" symlink, also by the function `updatereadme ls_my_script` (or delete it and from CMD: mklink README.md ScriptResources\ls_my_script\docs\index.html)
+	rm -rf ScriptResources/ls/docs; ln -s ../../../ls/ScriptResources/ls/docs ScriptResources/ls/docs # Create "ScriptResources/ls/docs" symlink, also by the function `updatelsdocs` (or delete it and from CMD: mklink /d ScriptResources\ls\docs ..\..\..\ls\ScriptResources\ls\docs)
  	```
  
 	Add the script's own files like _ls_my_script.lua_ and so, and (recomendably) **remove any shared files the new script may not need**, either via the explorer or the console, e.g.:

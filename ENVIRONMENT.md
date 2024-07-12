@@ -140,10 +140,10 @@ function updatereadme() {
 	export MSYS=$prev_msys
 }
 
-function updatesres() {
+function updateslsdocs() {
 	prev_msys=$MSYS
 	export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows (if run as admin or in developer mode)
-	rm -f ScriptResources/"$1"/ScriptResources; ln -s ../../ScriptResources ScriptResources/"$1"/ScriptResources
+	rm -rf ScriptResources/ls/docs; ln -s ../../../ls/ScriptResources/ls/docs ScriptResources/ls/docs
 	export MSYS=$prev_msys
 }
 
@@ -152,7 +152,7 @@ function updateall() {
 	export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows (if run as admin or in developer mode)
 	rm -f docs; ln -s ScriptResources/"$1"/docs docs
 	rm -f README.md; ln -s ScriptResources/"$1"/index.html README.md
-	#rm -f ScriptResources/"$1"/ScriptResources; ln -s ../../ScriptResources ScriptResources/"$1"/ScriptResources
+	rm -rf ScriptResources/ls/docs; ln -s ../../../ls/ScriptResources/ls/docs ScriptResources/ls/docs
 	export MSYS=$prev_msys
 }
 
