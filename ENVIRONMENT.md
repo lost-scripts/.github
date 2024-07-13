@@ -1,6 +1,6 @@
 <h1 align="center">Environment</h1><br>
 
-## .bashrc
+## 📄 .bashrc
 ```sh
 #######################
 # Git Command Aliases #
@@ -175,7 +175,7 @@ function updateall() {
 # Remember to reload .bashrc if you make any changes here either by alias "rb" or: source ~/.bashrc or . ~/.bashrc
 ```
 
-## .gitconfig
+## 📄 .gitconfig
 ```sh
 [core]
 	editor = \"C:\\Users\\Ramon0\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code\" --wait
@@ -229,7 +229,7 @@ function updateall() {
 	driver = true
 ```
 
-## .gitignore
+## 📄 .gitignore
 ```sh
 #########
 # PATHS #
@@ -314,11 +314,11 @@ _TODO.txt
 _[Tt]odo.txt
 ```
 
-## hooks
+## 📂 hooks
 
 <dl><dd>
 
-### pre-commit
+### 📄 pre-commit
 
 ```sh
 #!/bin/sh
@@ -364,7 +364,7 @@ done
 
 <dl><dd>
 
-### post-commit
+### 📄 post-commit
 
 ```sh
 #!/bin/sh
