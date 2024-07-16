@@ -78,7 +78,7 @@
 
 	```bash
 	rm -f docs; ln -s ScriptResources/ls_my_script/docs docs # Recreate "docs" symlink, also by the function `updatedocs ls_my_script` (or delete it and from CMD: mklink /d docs ScriptResources\ls_my_script\docs)
-	rm -f README.md; ln -s ScriptResources/ls_my_script/docs/index.html README.md # Recreate "README.md" symlink, also by the function `updatereadme ls_my_script` (or delete it and from CMD: mklink README.md ScriptResources\ls_my_script\docs\index.html)
+	rm -f README.md; ln -s ScriptResources/ls_my_script/docs/index.htm README.md # Recreate "README.md" symlink, also by the function `updatereadme ls_my_script` (or delete it and from CMD: mklink README.md ScriptResources\ls_my_script\docs\index.htm)
 	rm -rf ScriptResources/ls/docs; ln -s ../../../ls/ScriptResources/ls/docs ScriptResources/ls/docs # Create "ScriptResources/ls/docs" symlink, also by the function `updatelsdocs` (or delete it and from CMD: mklink /d ScriptResources\ls\docs ..\..\..\ls\ScriptResources\ls\docs)
  	```
  
@@ -90,6 +90,8 @@
 	git add -A # Similarly to "addremove", adds (even untracked) & removes files (if necessary, use: git add -u instead to add only deleted files)
 	git commit -m "ls_my_script: Initial commit"
 	```
+
+	> :bulb: **Tip:** In order to get symlinks backup as is e.g. in _7-Zip_, use _tar_ as archive format and make sure _Store symbolic links_ and _Store hard links_ options are checked. If you were using _WinRar_ and _RAR5_ as format, also make sure _Allow absolute paths in symbolic links_ advanced extraction option is checked. That way symlinks should be restored as actual links and without errors in both cases.
 
 	Lastly, make sure the _.gitattributes_ file counts with the lines listed bellow:
  	<br>
