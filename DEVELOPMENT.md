@@ -91,7 +91,7 @@
 	git commit -m "ls_my_script: Initial commit"
 	```
 
-	> :bulb: **Tip:** To preserve symbolic links as-is in your backups with [_7-Zip_](https://www.7-zip.org/), [_PeaZip_](https://peazip.github.io/) and so, use _tar_ as archive format and make sure that _Store symbolic links_ and _Store hard links_ options are checked. If using WinRar and "RAR5" as format instead, also make sure the advanced option _Allow absolute paths in symbolic links_ is checked at restoring. That way symlinks should restore as actual, error-free, links.
+	> :bulb: **Tip:** To preserve symbolic links as-is in your backups with [_7-Zip_](https://www.7-zip.org/), [_PeaZip_](https://peazip.github.io/) and so, use _tar_ as archive format and make sure that _Store symbolic links_ and _Store hard links_ options are checked. If using WinRar and "RAR5" as format instead, also make sure the advanced option _Allow absolute paths in symbolic links_ is checked at restoring. All that ensures symlinks will be restored as actual, error-free, links.
 
 	Lastly, make sure the _.gitattributes_ file counts with the lines listed bellow:
  	<br>
