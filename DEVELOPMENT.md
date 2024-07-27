@@ -72,7 +72,14 @@
 	ls  ../ls (push)
 	```
 
-* 1.2\. From the **root** of the new repo (otherwise suggested paths should be adjusted in consequence), update symlinks, add script's own files and, if apply, remove unnecesary stuff it may not need:
+* 1.2\. From the **root** of the new repo (otherwise suggested paths should be adjusted in consequence):
+ 
+	Add the script's own files like _ls_my_script.lua_, _ScriptResources\ls_my_script\docs.index.htm_ and so, and (recomendably) **remove any shared files the new script may not need**, either via the explorer or the console, e.g.:
+
+ 	```bash
+	git rm -r Modules # Should not using any of its contents, directly delete "Modules" folder
+	git rm Utility/ls_utilities_ext.lua # Delete e.g. only the unused ls_utilities_ext.lua
+	```
 
 	Update symlinks by simply running the function `updateall ls_my_script` or manually (although Bash may require to run `export MSYS=winsymlinks:nativestrict` before) by:
 
@@ -81,19 +88,10 @@
 	rm -f README.md; ln -s ScriptResources/ls_my_script/docs/index.htm README.md # Recreate "README.md" symlink, also by the function `updatereadme ls_my_script` (or delete it and from CMD: mklink README.md ScriptResources\ls_my_script\docs\index.htm)
 	rm -rf ScriptResources/ls/docs; ln -s ../../../ls/ScriptResources/ls/docs ScriptResources/ls/docs # Create "ScriptResources/ls/docs" symlink, also by the function `updatelsdocs` (or delete it and from CMD: mklink /d ScriptResources\ls\docs ..\..\..\ls\ScriptResources\ls\docs)
  	```
- 
-	Add the script's own files like _ls_my_script.lua_ and so, and (recomendably) **remove any shared files the new script may not need**, either via the explorer or the console, e.g.:
 
- 	```bash
-	git rm -r Modules # Should not using any of its contents, directly delete "Modules" folder
-	git rm Utility/ls_utilities_ext.lua # Delete e.g. only the unused ls_utilities_ext.lua
-	git add -A # Similarly to "addremove", adds (even untracked) & removes files (if necessary, use: git add -u instead to add only deleted files)
-	git commit -m "ls_my_script: Initial commit"
-	```
+	> :bulb: **Tip:** To preserve symbolic links as-is in your backups with e.g. [_7-Zip_](https://www.7-zip.org/) or [_PeaZip_](https://peazip.github.io/), use _tar_ (or similar) as archive format and make sure that _Store symbolic links_ and _Store hard links_ options are checked. If using [_WinRAR®_](https://www.win-rar.com/) and _RAR5_ format instead, also make sure the advanced option _Allow absolute paths in symbolic links_ is checked at restoring. All that ensures symlinks will be restored as actual, and error-free, links.
 
-	> :bulb: **Tip:** To preserve symbolic links as-is in your backups with [_7-Zip_](https://www.7-zip.org/), [_PeaZip_](https://peazip.github.io/) and so, use _tar_ as archive format and make sure that _Store symbolic links_ and _Store hard links_ options are checked. If using WinRar and "RAR5" as format instead, also make sure the advanced option _Allow absolute paths in symbolic links_ is checked at restoring. All that ensures symlinks will be restored as actual, error-free, links.
-
-	Lastly, make sure the _.gitattributes_ file counts with the lines listed bellow:
+	Make sure the _.gitattributes_ file counts with the lines listed bellow:
  	<br>
 	<dl><dd>
 	<details>
@@ -118,6 +116,14 @@
 	> :memo: **Note:** In the first block, `merge=ours` strategy is applied to those files in common which modified contents must prevail over the ones in the super-repo. In the second, `export-ignore` is applied to elements that must be excluded from [releases](#3-making-a-release).
 	</details>
 	</dd></dl>
+
+
+	And, lastly, add/remove everything and perform new repo's very first commit:
+
+ 	```bash
+	git add -A # Similarly to "addremove", adds (even untracked) & removes files (if necessary, use: git add -u instead to add only deleted files)
+	git commit -m "ls_my_script: Initial commit"
+	```
 
 * 1.3\. Now your script repository is ready for start working locally. To host it on GitHub (or the service of your choice), create a namesake repository there and follow the suggested instructions:
 

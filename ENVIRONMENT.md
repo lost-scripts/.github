@@ -74,38 +74,121 @@ alias rel='source ~/.bashrc'
 # Bash Functions #
 ##################
 
-function gsd() { # Set/Unset directory
-	if [[ -z "$1" ]]; then
-		unset GIT_DIR
-		echo "GIT_DIR: UNSET! ($(git rev-parse --absolute-git-dir))"
+function new() { # (repoName) | Create a new Lost Script...
+	# Prompt for repo name if not provided
+	if [ -z "$1" ]; then
+		read -p "Please enter a name in the format 'ls_my_script' to continue: " repo_name
 	else
-		local old=${GIT_DIR:-$(git rev-parse --absolute-git-dir)}
-		export GIT_DIR="$1"
-		echo "GIT_DIR: $old --> $GIT_DIR"
+		repo_name="$1"
 	fi
-}
 
-function gswt() { # Set/Unset work tree
-	if [[ -z "$1" ]]; then
-		unset GIT_WORK_TREE
-		echo "GIT_WORK_TREE: UNSET! ($(git rev-parse --show-toplevel))"
-	else
-		local old=${GIT_WORK_TREE:-$(git rev-parse --show-toplevel)}
-		export GIT_WORK_TREE="$1"
-		echo "GIT_WORK_TREE: $old --> $GIT_WORK_TREE"
+	# Determine the path to use
+	if [[ "$repo_name" == ../* ]]; then # Interpret as relative
+		repo_path="$repo_name"
+	elif [[ "$repo_name" == /* ]]; then # Interpret as absolute in a Unix format (e.g. `/d/Rai/Scripts/ls_my_script`)
+		repo_path="$repo_name"
+	else # Otherwise, use default location (one level up from cloned repo)
+		repo_path="../$repo_name"
 	fi
-}
 
-function repo() {
-	if [ $# -gt 0 ]; then
-			# Make absolute the path in the first parameter.
-			path=`(cd "$1" ; pwd)`
-			export GIT_DIR="$path"/.git
-			export GIT_WORK_TREE=$PWD
-	else
-			unset GIT_DIR
-			unset GIT_WORK_TREE
+	# Confirm before proceeding
+	while true; do
+		read -p "Proceed with the creation of new script '$repo_path'? (y/n): " -n 1 -r yn
+		echo # Move to a new line
+		case $yn in
+			[Yy]* ) break;; # Proceed
+			[Nn]* ) echo "Process cancelled (no script was created)."; return 1;; # Cancel process
+			* ) echo "Please answer y (yes) or n (no).";;
+		esac
+	done
+
+	# Check if the path already exists and is not empty
+	if [ -d "$repo_path" ] && [ "$(ls -A "$repo_path")" ]; then
+		echo "Error: The destination path '$repo_path' already exists and is not an empty directory."
+		return 1
 	fi
+	mkdir -p "$repo_path" || { echo "Error: Unable to create directory at $repo_path."; return 1; }	# Create the directory if it does not exist
+
+	# Get info relative to the super-repo before leaving it!
+	super_repo_remote=$(git remote get-url origin) # Extract the remote URL of the super-repo
+	account=$(echo "$super_repo_remote" | sed -E 's|https?://[^/]+/([^/]+)/.*|\1|') # Extract account from the URL
+	default_remote="https://github.com/$account/$repo_name.git" # Suggest a default remote URL based on account and repository name.
+
+	# Start cloning and stuff...
+	git clone . "$repo_path" -o ls # The `-o ls` is for directly rename the remote `origin` to `ls`
+	cd "$repo_path" || exit 1 # Leave the super-repo and make clone the current directory!
+	git remote set-url ls ../ls # Make path to the remote "ls" relative
+	mv docs/templets/README.md docs/README.md # Start overwriting files which content differs from the ones in the super-repo...
+	mv docs/templets/.gitattributes docs/.gitattributes
+	mv docs/templets/.gitignore docs/.gitignore
+	rmdir docs/templets 2>/dev/null # Try to silently remove the container folder if it is empty
+
+	# Function to ask if a file should be kept
+	ask_keep_file() {
+		while true; do
+			read -p "Do you want to keep: $1? (y/n): " -n 1 -r yn
+			echo # Move to a new line
+			case $yn in
+				[Yy]* ) return 0;; # Keep file
+				[Nn]* ) return 1;; # Do not keep file
+				* ) echo "Please answer y (yes) or n (no).";;
+			esac
+		done
+	}
+
+	# Loop through and query each file in Modules and Utility folders
+	for dir in Modules Utility; do
+		if [ -d "$dir" ]; then
+			for file in "$dir"/*; do
+				if [ -f "$file" ]; then # Verify that it is a file
+					if ask_keep_file "$file"; then
+						: #echo "Keeping: $file" # The : is a no-op command to avoid empty block errors!
+					else
+						git rm -q "$file" # Remove file silently
+					fi
+				fi
+			done
+			rmdir "$dir" 2>/dev/null # Try to silently remove the container folder if it is empty
+		fi
+	done
+
+	# Optionally, add --all and commit changes
+	while true; do
+		read -p "Do you want to commit the initial changes? (y/n): " -n 1 -r commit_yn
+		echo # Move to a new line
+		case $commit_yn in
+			[Yy]* )
+				git add -A
+				git commit -m "$repo_name: Initial commit"
+				echo "Initial commit done :D"
+				break;;
+			[Nn]* )
+				echo "Initial commit skipped!"
+				break;;
+			* ) echo "Please answer y (yes) or n (no).";;
+		esac
+	done
+
+	# Promp to a add the default remote, add a custom one or skip
+	while true; do
+		read -p "Add remote? (y (yes) adds default: '$default_remote'; enter new one adds that; n (no) skips; Enter key confims):" response
+		case $response in
+			[Yy]* ) remote_url=$default_remote; break;;
+			[Nn]* ) remote_url=""; break;;
+			* ) remote_url=$response; break;;
+		esac
+	done
+
+	if [ -n "$remote_url" ]; then
+		git remote add origin "$remote_url"
+		git branch -M main # Just in case?
+		#git push -u origin main # Maybe only if user answered y (yes) when prompted to commit? But this would assume the remote actually exists, so...
+		echo "Remote 'origin' added with URL $remote_url"
+	else
+		echo "No remote URL added."
+	fi
+
+	echo "Repository ready at $repo_path (current directory)."
 }
 
 function deploy() { # GitHub Pages deployment using 'gh-pages' branch just for that...
@@ -158,14 +241,48 @@ function updateall() {
 	export MSYS=$prev_msys
 }
 
-#function post_worktree() { cd "$1" && ./.git/hooks/post-worktree.sh }
-
 
 ############
 # Other... #
 ############
 
-#export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetually (commented due to it causes tab problems afterwards)
+function gsd() { # (path) | Set/Unset GIT_DIR to a specific directory
+	if [[ -z "$1" ]]; then
+		unset GIT_DIR
+		echo "GIT_DIR: UNSET! ($(git rev-parse --absolute-git-dir))"
+	else
+		local old=${GIT_DIR:-$(git rev-parse --absolute-git-dir)}
+		export GIT_DIR="$1"
+		echo "GIT_DIR: $old --> $GIT_DIR"
+	fi
+}
+
+function gswt() { # (path) | Set/Unset GIT_WORK_TREE to a specific directory
+	if [[ -z "$1" ]]; then
+		unset GIT_WORK_TREE
+		echo "GIT_WORK_TREE: UNSET! ($(git rev-parse --show-toplevel))"
+	else
+		local old=${GIT_WORK_TREE:-$(git rev-parse --show-toplevel)}
+		export GIT_WORK_TREE="$1"
+		echo "GIT_WORK_TREE: $old --> $GIT_WORK_TREE"
+	fi
+}
+
+function repo() { # (path) | Set/Unset GIT_DIR & GIT_WORK_TREE for a specific repository
+	if [ $# -gt 0 ]; then
+			# Make absolute the path in the first parameter.
+			path=`(cd "$1" ; pwd)`
+			export GIT_DIR="$path"/.git
+			export GIT_WORK_TREE=$PWD
+	else
+			unset GIT_DIR
+			unset GIT_WORK_TREE
+	fi
+}
+
+#function post_worktree() { cd "$1" && ./.git/hooks/post-worktree.sh }
+
+#export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetually (commented due to it causes tab problems afterwards!)
 
 
 ##############
