@@ -241,6 +241,18 @@ function updateall() {
 	export MSYS=$prev_msys
 }
 
+function stpush() { # Push changes TO the repository of the theme
+	local subtree_dir="${1:-themes/lost-theme}" # Use the provided argument as the subtree directory, or default to "themes/lost-theme"
+	local bare_repo="../$(basename $subtree_dir)" # Compute the path to the sibling repo (assumes ../<subtree_name>)
+	git subtree push --prefix="$subtree_dir" "$bare_repo" main && echo "Subtree push to '$bare_repo' completed!" || echo "Subtree push to '$bare_repo' failed!"
+}
+
+function stpull() { # Pull changes FROM the repository of the theme
+	local subtree_dir="${1:-themes/lost-theme}"	# Use the provided argument as the subtree directory, or default to "themes/lost-theme"
+	local bare_repo="../$(basename $subtree_dir)" # Compute the path to the sibling repo (assumes ../<subtree_name>)
+	git subtree pull --prefix="$subtree_dir" "$bare_repo" main --squash && echo "Subtree pull to '$bare_repo' completed!" || echo "Subtree pull to '$bare_repo' failed!"
+}
+
 
 ############
 # Other... #
@@ -289,7 +301,7 @@ function repo() { # (path) | Set/Unset GIT_DIR & GIT_WORK_TREE for a specific re
 # Bash Notes #
 ##############
 
-# Remember to reload .bashrc if you make any changes here either by alias "rb" or: source ~/.bashrc or . ~/.bashrc
+# Remember to reload .bashrc if you make any changes here either by alias "rel" or: source ~/.bashrc or . ~/.bashrc
 ```
 
 ## 📄 .gitconfig
