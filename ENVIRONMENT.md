@@ -297,10 +297,19 @@ function repo() { # (path) | Set/Unset GIT_DIR & GIT_WORK_TREE for a specific re
 #export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetually (commented due to it causes tab problems afterwards!)
 
 
+############
+#   Hugo   #
+############
+
+alias h='hugo --gc --cleanDestinationDir --destination docs'
+alias hs='hugo server --disableFastRender --destination public'
+
+
 ##############
 # Bash Notes #
 ##############
 
+# Check alias: type -a <command>
 # Remember to reload .bashrc if you make any changes here either by alias "rel" or: source ~/.bashrc or . ~/.bashrc
 ```
 
