@@ -50,6 +50,8 @@ alias gs='git status'
 alias gsu='git status -u'
 alias gsuno='git status -uno'
 alias gsw='git switch '
+alias gwipe='echo "[!] Wiping worktree in 6, 5, 4... (Ctrl+C to cancel)"; sleep 6; git reset --hard HEAD && git clean -f' # Restore worktree to match current commit, or...
+alias gwiped='echo "[!] Wiping worktree in 6, 5, 4... (Ctrl+C to cancel)"; sleep 6; git reset --hard HEAD && git clean -fd' # ...to also include directories, if necessary!
 
 alias grdu='git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {}' # Resolve REMOVING all "deleted by us"
 alias grdt='git status --porcelain | grep 'DT' | cut -c 4- | xargs -I {} git rm {}' # Resolve REMOVING all "deleted by them"
@@ -353,6 +355,7 @@ alias hs='hugo server --disableFastRender --destination public'
 	rs = remote set-url # Remote new-url
 	st = status
 	stu = status -u
+	wipe = "!f() { echo '[!] Wiping worktree in 6, 5, 4... (Ctrl+C to cancel)'; sleep 6; git reset --hard HEAD && git clean -f$1; }; f" # Restore worktree to match current commit (add ` d` to include dirs if necessary)
 
 	rdu = "!git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {}" # Resolve removing all "deleted by us"
 	rdt = "!git status --porcelain | grep 'DT' | cut -c 4- | xargs -I {} git rm {}" # Resolve removing all "deleted by them"
