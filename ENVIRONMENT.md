@@ -36,7 +36,7 @@ alias gfdiff='git fetch && git diff HEAD..@{u}' # Only see the changes that woul
 alias gl='git log --graph --pretty=oneline --abbrev-commit --decorate # nice log output'
 alias glhist="git log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
 #alias glrai="git log --date-order --date=iso --graph --full-history --all --pretty=format:'%x08%x09%C(red)%h %C(cyan)%ai%x08%x08%x08%x08%x08%x08%x08%x08%x08%C(reset) %C(bold green)(%ar%x08%x08%x08%x08)%C(reset) %C(yellow)%aN:%C(reset)%C(bold yellow)%d %C(reset)%s'"
-alias glrai="git log --date-order --date=format:'%Y%m%d-%H%M' --graph --full-history --all --pretty=format:'%x08%x09%C(cyan)%ad%C(reset) %C(green)%h%C(reset)%C(red)%d%C(reset) %s [%C(yellow)%aN%C(reset)]'"
+alias glrai="git log --date-order --date=format:'%Y%m%d-%H%M' --graph --full-history --pretty=format:'%x08%x09%C(cyan)%ad%C(reset) %C(green)%h%C(reset)%C(red)%d%C(reset) %s [%C(yellow)%aN%C(reset)]'" # Add --all to include unreachable items
 alias glprev='git log main..origin/main' # Preview commit logs of changes
 alias glad='git log --all --decorate --oneline --graph'
 alias glall="git log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d'"
@@ -46,6 +46,7 @@ alias grmc='git rm --cached '
 alias gpullauh='git pull --allow-unrelated-histories' # Merges histories of two projects that started their lives independently
 alias gr='git remote -v'
 alias grs='git remote set-url' # Remote new-url
+alias gsh='git show --no-patch' # Show tag info without diff
 alias gs='git status'
 alias gsu='git status -u'
 alias gsuno='git status -uno'
@@ -346,13 +347,14 @@ alias hs='hugo server --disableFastRender --destination public'
 	lg = log --graph --pretty=oneline --abbrev-commit --decorate # Nice log output
 	lhist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
 	#lrai = log --date-order --date=iso --graph --full-history --all --pretty=format:'%x08%x09%C(red)%h %C(cyan)%ai%x08%x08%x08%x08%x08%x08%x08%x08%x08%C(reset) %C(bold green)(%ar%x08%x08%x08%x08)%C(reset) %C(yellow)%aN:%C(reset)%C(bold yellow)%d %C(reset)%s'
-	lrai = log --date-order --date=format:'%Y%m%d-%H%M' --graph --full-history --all --pretty=format:'%x08%x09%C(cyan)%ad%C(reset) %C(green)%h%C(reset)%C(red)%d%C(reset) %s [%C(yellow)%aN%C(reset)]'
+	lrai = log --date-order --date=format:'%Y%m%d-%H%M' --graph --full-history --pretty=format:'%x08%x09%C(cyan)%ad%C(reset) %C(green)%h%C(reset)%C(red)%d%C(reset) %s [%C(yellow)%aN%C(reset)]' # Add --all to include unreachable items
 	lprev = log main..origin/main # Preview commit logs of changes
 	lad = log --all --decorate --oneline --graph
 	lall = log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d'
 	pullauh = git pull --allow-unrelated-histories # Merges histories of two projects that started their lives independently
 	r = remote -v
 	rs = remote set-url # Remote new-url
+	sh = show --no-patch # Show tag info without diff
 	st = status
 	stu = status -u
 	wipe = "!f() { echo '[!] Wiping worktree in 6, 5, 4... (Ctrl+C to cancel)'; sleep 6; git reset --hard HEAD && git clean -f$1; }; f" # Restore worktree to match current commit (add ` d` to include dirs if necessary)
