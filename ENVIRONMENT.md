@@ -6,7 +6,7 @@
 # Git Command Aliases #
 #######################
 
-alias g='git'
+alias g='git' # Streamlines the use of .gitconfig aliases e.g. `g lrai` (so maybe I should reconsider duplication?)
 alias ga='git add'
 alias gaa='git add .'
 alias gaas='git add . && git status -u'
@@ -19,8 +19,10 @@ alias garc='mkdir -p _releases && git archive -o _releases/$(basename "$(git rev
 alias gb='git branch'
 alias gtype='cat-file -t'
 alias gdumb='cat-file -p'
+alias gci='git commit -m'
+alias gcl='git clone'
 alias gco='git checkout'
-alias gc='git commit -m'
+alias gcp='git cherry-pick'
 #alias gdeploy='git checkout pages && git reset --hard main && git push origin pages -f' # Use function below instead
 alias gdc='git diff --cached'
 alias gdprev='git diff main..origin/main' # Preview diffs of changes
@@ -33,10 +35,11 @@ alias gw='git rev-parse --show-toplevel'
 alias gdw='git rev-parse --absolute-git-dir && git rev-parse --show-toplevel'
 alias gf='git fetch'
 alias gfdiff='git fetch && git diff HEAD..@{u}' # Only see the changes that would come with git pull
-alias gl='git log --graph --pretty=oneline --abbrev-commit --decorate # nice log output'
+alias gl='git log --graph --pretty=oneline --abbrev-commit --decorate' # nice log output
+alias gld="git log --graph --full-history --date-order --date=format:'%Y%m%d-%H%M' --pretty=format:'%x08%x09 %C(green)%h%C(reset) %C(cyan)AD%C(reset)·%C(magenta)CD%C(reset): %C(cyan)%ad%C(reset)·%C(magenta)%cd%C(reset) %C(cyan)%an%C(reset)·%C(magenta)%cn%C(reset)%C(red)%d%C(reset) %s'"
 alias glhist="git log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
 #alias glrai="git log --date-order --date=iso --graph --full-history --all --pretty=format:'%x08%x09%C(red)%h %C(cyan)%ai%x08%x08%x08%x08%x08%x08%x08%x08%x08%C(reset) %C(bold green)(%ar%x08%x08%x08%x08)%C(reset) %C(yellow)%aN:%C(reset)%C(bold yellow)%d %C(reset)%s'"
-alias glrai="git log --date-order --date=format:'%Y%m%d-%H%M' --graph --full-history --pretty=format:'%x08%x09%C(cyan)%ad%C(reset) %C(green)%h%C(reset)%C(red)%d%C(reset) %s [%C(yellow)%aN%C(reset)]'" # Add --all to include unreachable items
+alias glrai="git log --graph --full-history --date-order --date=format:'%Y%m%d-%H%M' --pretty=format:'%x08%x09 %C(green)%h%C(reset) %C(cyan)%ad%C(reset)%C(red)%d%C(reset) %s [%C(yellow)%aN%C(reset)]'" # Add --all to include unreachable items
 alias glprev='git log main..origin/main' # Preview commit logs of changes
 alias glad='git log --all --decorate --oneline --graph'
 alias glall="git log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d'"
@@ -44,15 +47,14 @@ alias gmv='git mv '
 alias grm='git rm '
 alias grmc='git rm --cached '
 alias gpullauh='git pull --allow-unrelated-histories' # Merges histories of two projects that started their lives independently
-alias gr='git remote -v'
+alias gr='git remote -vv'
 alias grs='git remote set-url' # Remote new-url
 alias gsh='git show --no-patch' # Show tag info without diff
 alias gs='git status'
 alias gsu='git status -u'
 alias gsuno='git status -uno'
 alias gsw='git switch '
-alias gwipe='echo "[!] Wiping worktree in 6, 5, 4... (Ctrl+C to cancel)"; sleep 6; git reset --hard HEAD && git clean -f' # Restore worktree to match current commit, or...
-alias gwiped='echo "[!] Wiping worktree in 6, 5, 4... (Ctrl+C to cancel)"; sleep 6; git reset --hard HEAD && git clean -fd' # ...to also include directories, if necessary!
+alias gwipe='echo "[!] Wiping worktree in 6, 5, 4... (Ctrl+C to cancel)"; sleep 6; git reset --hard HEAD && git clean -f' # Restore worktree to match current commit (add ` d` to include dirs if necessary)
 
 alias grdu='git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {}' # Resolve REMOVING all "deleted by us"
 alias grdt='git status --porcelain | grep 'DT' | cut -c 4- | xargs -I {} git rm {}' # Resolve REMOVING all "deleted by them"
@@ -319,25 +321,30 @@ alias hs='hugo server --disableFastRender --destination public'
 ## 📄 .gitconfig
 ```sh
 [core]
-	editor = \"C:\\Users\\Ramon0\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code\" --wait
+	editor = \"C:\\Program Files\\Microsoft VS Code\\bin\\code\" --wait
+	autocrlf = false
+	eol = lf 
 	symlinks = true
-	excludesfile = C:\\Users\\Ramon0\\.gitignore
+	excludesfile = C:\\Users\\Rai\\.gitignore
 [user]
 	email = rai.lopez@outlook.com
 	name = Rai
 [alias]
 	a = add
 	aa = add .
+	aas = add . && git status -u
 	aaa = add --all
+	aaas = add --all && git status -u
 	ac = !git add . && git commit -m
+	aca = !git add . && git commit --amend # Not working as expected...
 	aac = !git add -A && git commit -m
-	br = branch
+	b = branch
 	type = cat-file -t
 	dump = cat-file -p
+	ci = commit -m
+	cl = clone
 	co = checkout
 	cp = cherry-pick
-	cl = clone
-	ci = commit
 	#deploy ='git checkout pages && git reset --hard main && git push origin pages -f' # Use the function below instead
 	dc = diff --cached
 	dprev = diff main..origin/main # Preview diffs of changes
@@ -345,14 +352,15 @@ alias hs='hugo server --disableFastRender --destination public'
 	ft = fetch
 	ftdiff = !git fetch && git diff HEAD..@{u} # Only see the changes that would come with git pull
 	lg = log --graph --pretty=oneline --abbrev-commit --decorate # Nice log output
+	ld = log --graph --full-history --date-order --date=format:'%Y%m%d-%H%M' --pretty=format:'%x08%x09 %C(green)%h%C(reset) %C(cyan)AD%C(reset)·%C(magenta)CD%C(reset): %C(cyan)%ad%C(reset)·%C(magenta)%cd%C(reset) %C(cyan)%an%C(reset)·%C(magenta)%cn%C(reset)%C(red)%d%C(reset) %s'
 	lhist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
 	#lrai = log --date-order --date=iso --graph --full-history --all --pretty=format:'%x08%x09%C(red)%h %C(cyan)%ai%x08%x08%x08%x08%x08%x08%x08%x08%x08%C(reset) %C(bold green)(%ar%x08%x08%x08%x08)%C(reset) %C(yellow)%aN:%C(reset)%C(bold yellow)%d %C(reset)%s'
-	lrai = log --date-order --date=format:'%Y%m%d-%H%M' --graph --full-history --pretty=format:'%x08%x09%C(cyan)%ad%C(reset) %C(green)%h%C(reset)%C(red)%d%C(reset) %s [%C(yellow)%aN%C(reset)]' # Add --all to include unreachable items
+	lrai = log --date-order --date=format:'%Y%m%d-%H%M' --graph --full-history --pretty=format:'%x08%x09 %C(green)%h%C(reset) %C(cyan)%ad%C(reset)%C(red)%d%C(reset) %s [%C(yellow)%aN%C(reset)]' # Add --all to include unreachable items
 	lprev = log main..origin/main # Preview commit logs of changes
 	lad = log --all --decorate --oneline --graph
 	lall = log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d'
 	pullauh = git pull --allow-unrelated-histories # Merges histories of two projects that started their lives independently
-	r = remote -v
+	r = remote -vv
 	rs = remote set-url # Remote new-url
 	sh = show --no-patch # Show tag info without diff
 	st = status
