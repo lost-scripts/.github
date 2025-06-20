@@ -6,7 +6,7 @@
 # Git Command Aliases #
 #######################
 
-alias g='git' # Streamlines the use of .gitconfig aliases e.g. `g lrai` (so maybe I should reconsider duplication?)
+alias g='git' # Streamlines the use of .gitconfig aliases e.g. `g lrai` (so maybe I should reconsider the duplication?)
 alias ga='git add'
 alias gaa='git add .'
 alias gaas='git add . && git status -u'
@@ -36,7 +36,7 @@ alias gdw='git rev-parse --absolute-git-dir && git rev-parse --show-toplevel'
 alias gf='git fetch'
 alias gfdiff='git fetch && git diff HEAD..@{u}' # Only see the changes that would come with git pull
 alias gl='git log --graph --pretty=oneline --abbrev-commit --decorate' # nice log output
-alias gld="git log --graph --full-history --date-order --date=format:'%Y%m%d-%H%M' --pretty=format:'%x08%x09 %C(green)%h%C(reset) %C(cyan)AD%C(reset)·%C(magenta)CD%C(reset): %C(cyan)%ad%C(reset)·%C(magenta)%cd%C(reset) %C(cyan)%an%C(reset)·%C(magenta)%cn%C(reset)%C(red)%d%C(reset) %s'"
+alias gld="git log --graph --full-history --date-order --date=format:'%Y%m%d-%H%M' --pretty=format:'%x08%x09 %C(green)%h%C(reset) %C(cyan)AD%C(reset)·%C(magenta)CD%C(reset): %C(cyan)%ad%C(reset)·%C(magenta)%cd%C(reset) %C(cyan)%an%C(reset)·%C(magenta)%cn%C(reset)%C(red)%d%C(reset) %s'" # Add e.g. ` -n 8` to limit output
 alias glhist="git log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
 #alias glrai="git log --date-order --date=iso --graph --full-history --all --pretty=format:'%x08%x09%C(red)%h %C(cyan)%ai%x08%x08%x08%x08%x08%x08%x08%x08%x08%C(reset) %C(bold green)(%ar%x08%x08%x08%x08)%C(reset) %C(yellow)%aN:%C(reset)%C(bold yellow)%d %C(reset)%s'"
 alias glrai="git log --graph --full-history --date-order --date=format:'%Y%m%d-%H%M' --pretty=format:'%x08%x09 %C(green)%h%C(reset) %C(cyan)%ad%C(reset)%C(red)%d%C(reset) %s [%C(yellow)%aN%C(reset)]'" # Add --all to include unreachable items
@@ -54,6 +54,8 @@ alias gs='git status'
 alias gsu='git status -u'
 alias gsuno='git status -uno'
 alias gsw='git switch '
+alias gta='git tag -a' # Add annotated tag: gta <tagname> [<hash> if not in commit] [-m <mensaje> to avoid editor]
+alias gtr='git push origin :refs/tags/' # Remove remote tag: gtr <tagname>
 alias gwipe='echo "[!] Wiping worktree in 6, 5, 4... (Ctrl+C to cancel)"; sleep 6; git reset --hard HEAD && git clean -f' # Restore worktree to match current commit (add ` d` to include dirs if necessary)
 
 alias grdu='git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {}' # Resolve REMOVING all "deleted by us"
@@ -352,7 +354,7 @@ alias hs='hugo server --disableFastRender --destination public'
 	ft = fetch
 	ftdiff = !git fetch && git diff HEAD..@{u} # Only see the changes that would come with git pull
 	lg = log --graph --pretty=oneline --abbrev-commit --decorate # Nice log output
-	ld = log --graph --full-history --date-order --date=format:'%Y%m%d-%H%M' --pretty=format:'%x08%x09 %C(green)%h%C(reset) %C(cyan)AD%C(reset)·%C(magenta)CD%C(reset): %C(cyan)%ad%C(reset)·%C(magenta)%cd%C(reset) %C(cyan)%an%C(reset)·%C(magenta)%cn%C(reset)%C(red)%d%C(reset) %s'
+	ld = log --graph --full-history --date-order --date=format:'%Y%m%d-%H%M' --pretty=format:'%x08%x09 %C(green)%h%C(reset) %C(cyan)AD%C(reset)·%C(magenta)CD%C(reset): %C(cyan)%ad%C(reset)·%C(magenta)%cd%C(reset) %C(cyan)%an%C(reset)·%C(magenta)%cn%C(reset)%C(red)%d%C(reset) %s' # Add e.g. ` -n 8` to limit output
 	lhist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
 	#lrai = log --date-order --date=iso --graph --full-history --all --pretty=format:'%x08%x09%C(red)%h %C(cyan)%ai%x08%x08%x08%x08%x08%x08%x08%x08%x08%C(reset) %C(bold green)(%ar%x08%x08%x08%x08)%C(reset) %C(yellow)%aN:%C(reset)%C(bold yellow)%d %C(reset)%s'
 	lrai = log --date-order --date=format:'%Y%m%d-%H%M' --graph --full-history --pretty=format:'%x08%x09 %C(green)%h%C(reset) %C(cyan)%ad%C(reset)%C(red)%d%C(reset) %s [%C(yellow)%aN%C(reset)]' # Add --all to include unreachable items
@@ -365,6 +367,8 @@ alias hs='hugo server --disableFastRender --destination public'
 	sh = show --no-patch # Show tag info without diff
 	st = status
 	stu = status -u
+	ta = tag -a # Add annotated tag: ta <tagname> [<hash> if not in commit] [-m <mensaje> to avoid editor]
+	tr = !git push origin :refs/tags/ # Remove remote tag: tr <tagname>
 	wipe = "!f() { echo '[!] Wiping worktree in 6, 5, 4... (Ctrl+C to cancel)'; sleep 6; git reset --hard HEAD && git clean -f$1; }; f" # Restore worktree to match current commit (add ` d` to include dirs if necessary)
 
 	rdu = "!git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {}" # Resolve removing all "deleted by us"
