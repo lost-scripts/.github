@@ -1,0 +1,28 @@
+#!/bin/sh
+# post-commit hook script for writing reliable ScriptBuild based *.lua.log files
+
+# Define the pattern to search for
+pattern="^ScriptBuild ="
+
+# Loop through all committed Lua files
+git diff-tree --no-commit-id --name-only -r HEAD | grep '\.lua$' | while IFS= read -r file; do
+	# Check if the file contains the ScriptBuild line within the first 10 lines
+	if head -n 10 "$file" | grep -m 1 -q "$pattern"; then
+		# Get the commit message
+		commit_message=$(git log -1 --pretty=%B)
+		# Get the commit hash
+		commit_hash=$(git log -1 --pretty=%h)
+		# Get the modification date of the file
+		mod_date=$(date -r "$file" +"%Y%m%d-%H%M")
+		# Create or update the log file
+		log_file="${file}.log"
+		# Ensure the log file exists
+		touch "$log_file"
+		# Prepend the new entry to the log file
+		echo "$mod_date ($commit_hash): $commit_message" | cat - "$log_file" > "${log_file}.tmp" && mv "${log_file}.tmp" "$log_file"
+		# Mark the log file as hidden on Windows?
+		#if [ "$(uname -o)" = "Msys" ]; then
+			#attrib +h "$log_file"
+		#fi
+	fi
+done

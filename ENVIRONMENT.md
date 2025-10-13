@@ -471,7 +471,7 @@ _[Tt]odo.txt
 
 ## 📂 hooks
 
-> :memo: **Note:** Hooks are versioned under ".github/hooks". Activate them locally with `git config core.hooksPath .github/hooks` and ensure they are executable by `chmod +x .github/hooks/*` or `chmod +x <filepath>` (the flag is tracked by Git but may need to be restored on Windows).
+> :memo: **Note:** Hooks live in the central ".github" repository under "/hooks". Copy them to your repos and ensure they are activated: `git config core.hooksPath .github/hooks` and executable: `chmod +x .github/hooks/*` or `chmod +x <filepath>` (the flag is tracked by Git but may need to be restored on Windows). Local modifications are discouraged unless strictly necessary.
 
 <dl><dd>
 
