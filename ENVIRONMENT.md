@@ -471,6 +471,8 @@ _[Tt]odo.txt
 
 ## 📂 hooks
 
+> :memo: **Note:** Hooks are versioned under ".github/hooks". Activate them locally with `git config core.hooksPath .github/hooks` and ensure they are executable by `chmod +x .github/hooks/*` or `chmod +x <filepath>` (the flag is tracked by Git but may need to be restored on Windows).
+
 <dl><dd>
 
 ### 📄 pre-commit
@@ -499,8 +501,8 @@ git diff --cached --name-only | grep '\.lua$' | while IFS= read -r file; do
 
 		# Update the ScriptBuild line and create a backup in the specified directory
 		sed -i.bak "s/$pattern .*/ScriptBuild = \"$new_build_date\"/" "$file"
-		# Convert LF to CRLF
-		awk '{printf "%s\r\n", $0}' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+		# Convert LF to CRLF (comment/uncomment as needed)
+		#awk '{printf "%s\r\n", $0}' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
 		# Move the backup file to the backup directory
 		mv "$file.bak" "$backup_dir/"
 
