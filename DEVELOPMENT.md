@@ -240,3 +240,19 @@
 [^3]: `-b main` specifies the branch to clone (if omitted, the default one is cloned), `ls` is the name of repository's remote (or, if not applicable, its path) and, finally, `ls_my_script` is the name of the directory where the repository will be cloned.
 
 [1]: <https://github.com/lost-scripts/ls> 'Go to "ls" super-repository on GitHub'
+
+---
+
+### 5\. Notes
+
+* 5.1. Git Branch & Commit Cheatsheet
+
+	| BRANCHES                             | COMMITS                             |
+	| ------------------------------------ | ----------------------------------- |
+	| `feat/<name>` → new feature          | `feat:` new feature                 |
+	| `fix/<name>` → bugfix                | `fix:` bugfix                       |
+	| `chore/<name>` → maintenance/tooling | `chore:` maintenance/meta           |
+	| `docs/<name>` → documentation only   | `docs:` docs only                   |
+	| `refactor/<name>` → code restructure | `refactor:` no behavior change      |
+	| `exp/<name>` → experimental/proto    | `test:` add/modify tests            |
+	| `hotfix/<name>` → urgent fix on main |                                     |
