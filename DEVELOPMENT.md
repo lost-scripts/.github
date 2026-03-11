@@ -160,7 +160,7 @@
 
 	> :warning: **Warning:** In any case, all possible conflicts will have to be resolved. To delete all unnecesary common files detected as _deleted by us_ at once, you can make use the following command:
 	>```bash
-	>git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {} # Or its alias: grdu
+	>git status --porcelain | grep 'DU' | cut -c 4- | xargs -I {} git rm {} # Or its alias: dbur
 	>```
 
 * 2.2\. Before uploading local changes to the remote, it's always advisable to make sure that the script repo is up to date:
