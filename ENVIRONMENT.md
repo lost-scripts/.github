@@ -1,7 +1,18 @@
 <h1 align="center">Environment</h1><br>
 
 ## 📄 .bashrc
+
 ```sh
+#################
+# Configuration #
+#################
+
+export PROJECTS="C:/Users/Rai/Projects" # See about using `%CSIDL_PROFILE%` or equivalent? E.g. "%CSIDL_PROFILE%/Projects"
+export PROJECT="$PROJECTS/LS" # Main project container
+export PROJECT_ALT="$PROJECTS/RL" # Aternative project container (e.g. for other/personal repos like lost-theme?)
+export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetually (comment if it causes tab problems afterwards)
+
+
 #######################
 # Git Command Aliases #
 #######################
@@ -44,8 +55,8 @@ alias glrai="git lrai"
 alias glprev='git lprev'
 alias glad='git lad'
 alias glall="git lall"
-alias gm2m='git m2m'
-alias gm2d='git m2d'
+alias gm2main='git m2main'
+alias gm2dev='git m2dev'
 alias gmt='git mt'
 alias gmv='git mv'
 alias grm='git rm'
@@ -53,6 +64,7 @@ alias grmc='git rmc'
 alias gr='git r'
 alias grs='git rs'
 alias gpullauh='git pullauh'
+alias gpom='git pom'
 alias grepod='git repod'
 #alias grepoud='unset GIT_DIR' # Use function 'reposud' instead
 alias grepow='git repow'
@@ -85,183 +97,20 @@ alias rel='source ~/.bashrc'
 # Bash Functions #
 ##################
 
-function new() { # (repoName) | Create a new Lost Script...
-	# Prompt for repo name if not provided
-	if [ -z "$1" ]; then
-		read -p "Please enter a name in the format 'ls_my_script' to continue: " repo_name
-	else
-		repo_name="$1"
-	fi
-
-	# Determine the path to use
-	if [[ "$repo_name" == ../* ]]; then # Interpret as relative
-		repo_path="$repo_name"
-	elif [[ "$repo_name" == /* ]]; then # Interpret as absolute in a Unix format (e.g. `/d/Rai/Scripts/ls_my_script`)
-		repo_path="$repo_name"
-	else # Otherwise, use default location (one level up from cloned repo)
-		repo_path="../$repo_name"
-	fi
-
-	# Confirm before proceeding
-	while true; do
-		read -p "Proceed with the creation of new script '$repo_path'? (y/n): " -n 1 -r yn
-		echo # Move to a new line
-		case $yn in
-			[Yy]* ) break;; # Proceed
-			[Nn]* ) echo "Process cancelled (no script was created)."; return 1;; # Cancel process
-			* ) echo "Please answer y (yes) or n (no).";;
-		esac
-	done
-
-	# Check if the path already exists and is not empty
-	if [ -d "$repo_path" ] && [ "$(ls -A "$repo_path")" ]; then
-		echo "Error: The destination path '$repo_path' already exists and is not an empty directory."
-		return 1
-	fi
-	mkdir -p "$repo_path" || { echo "Error: Unable to create directory at $repo_path."; return 1; }	# Create the directory if it does not exist
-
-	# Get info relative to the super-repo before leaving it!
-	super_repo_remote=$(git remote get-url origin) # Extract the remote URL of the super-repo
-	account=$(echo "$super_repo_remote" | sed -E 's|https?://[^/]+/([^/]+)/.*|\1|') # Extract account from the URL
-	default_remote="https://github.com/$account/$repo_name.git" # Suggest a default remote URL based on account and repository name.
-
-	# Start cloning and stuff...
-	git clone . "$repo_path" -o ls # The `-o ls` is for directly rename the remote `origin` to `ls`
-	cd "$repo_path" || exit 1 # Leave the super-repo and make clone the current directory!
-	git remote set-url ls ../ls # Make path to the remote "ls" relative
-	mv docs/templets/README.md docs/README.md # Start overwriting files which content differs from the ones in the super-repo...
-	mv docs/templets/.gitattributes docs/.gitattributes
-	mv docs/templets/.gitignore docs/.gitignore
-	rmdir docs/templets 2>/dev/null # Try to silently remove the container folder if it is empty
-
-	# Function to ask if a file should be kept
-	ask_keep_file() {
-		while true; do
-			read -p "Do you want to keep: $1? (y/n): " -n 1 -r yn
-			echo # Move to a new line
-			case $yn in
-				[Yy]* ) return 0;; # Keep file
-				[Nn]* ) return 1;; # Do not keep file
-				* ) echo "Please answer y (yes) or n (no).";;
-			esac
-		done
-	}
-
-	# Loop through and query each file in Modules and Utility folders
-	for dir in Modules Utility; do
-		if [ -d "$dir" ]; then
-			for file in "$dir"/*; do
-				if [ -f "$file" ]; then # Verify that it is a file
-					if ask_keep_file "$file"; then
-						: #echo "Keeping: $file" # The : is a no-op command to avoid empty block errors!
-					else
-						git rm -q "$file" # Remove file silently
-					fi
-				fi
-			done
-			rmdir "$dir" 2>/dev/null # Try to silently remove the container folder if it is empty
-		fi
-	done
-
-	# Optionally, add --all and commit changes
-	while true; do
-		read -p "Do you want to commit the initial changes? (y/n): " -n 1 -r commit_yn
-		echo # Move to a new line
-		case $commit_yn in
-			[Yy]* )
-				git add -A
-				git commit -m "$repo_name: Initial commit"
-				echo "Initial commit done :D"
-				break;;
-			[Nn]* )
-				echo "Initial commit skipped!"
-				break;;
-			* ) echo "Please answer y (yes) or n (no).";;
-		esac
-	done
-
-	# Promp to a add the default remote, add a custom one or skip
-	while true; do
-		read -p "Add remote? (y (yes) adds default: '$default_remote'; enter new one adds that; n (no) skips; Enter key confims):" response
-		case $response in
-			[Yy]* ) remote_url=$default_remote; break;;
-			[Nn]* ) remote_url=""; break;;
-			* ) remote_url=$response; break;;
-		esac
-	done
-
-	if [ -n "$remote_url" ]; then
-		git remote add origin "$remote_url"
-		git branch -M main # Just in case?
-		#git push -u origin main # Maybe only if user answered y (yes) when prompted to commit? But this would assume the remote actually exists, so...
-		echo "Remote 'origin' added with URL $remote_url"
-	else
-		echo "No remote URL added."
-	fi
-
-	echo "Repository ready at $repo_path (current directory)."
-}
-
-function deploy() { # GitHub Pages deployment using 'gh-pages' branch just for that...
-	echo "WARNING: Branch 'gh-pages' will be overwritten locally and remotely!"
-	read -p "Are you sure you want to commit all changes and deploy Pages? (y/n) " -n 1 -r
-	echo # (optional) move to a new line
-	if [[ $REPLY =~ ^[Yy]$ ]]
-	then
-		current_branch=$(git branch --show-current)
-		#cp -f README.md docs/index.html # Copy & Rename Method (3 lines): Copy README.md and paste it as index.html in docs folder
-		#git add -A # Stage all changes (instead of: git add docs/index.html?)
-		#git commit -m "Predeployment commit: ensure main has index.html current contents" 
-		git checkout gh-pages
-		git reset --hard main
-		git push origin gh-pages -f
-		git checkout "$current_branch"
-		echo "Deployment complete. Returned to branch '$current_branch'."
-	else
-		echo "Deployment canceled."
-	fi
-}
-
-function updatedocs() {
-	prev_msys=$MSYS
-	export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows (if run as admin or in developer mode)
-	rm -f docs; ln -s ScriptResources/"$1"/docs docs
-	export MSYS=$prev_msys
-}
-
-function updatereadme() {
-	prev_msys=$MSYS
-	export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows (if run as admin or in developer mode)
-	rm -f README.md; ln -s ScriptResources/"$1"/index.html README.md
-	export MSYS=$prev_msys
-}
-
-function updateslsdocs() {
-	prev_msys=$MSYS
-	export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows (if run as admin or in developer mode)
-	rm -rf ScriptResources/ls/docs; ln -s ../../../ls/ScriptResources/ls/docs ScriptResources/ls/docs
-	export MSYS=$prev_msys
-}
-
-function updateall() {
-	prev_msys=$MSYS
-	export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows (if run as admin or in developer mode)
-	rm -f docs; ln -s ScriptResources/"$1"/docs docs
-	rm -f README.md; ln -s ScriptResources/"$1"/index.html README.md
-	rm -rf ScriptResources/ls/docs; ln -s ../../../ls/ScriptResources/ls/docs ScriptResources/ls/docs
-	export MSYS=$prev_msys
-}
-
 function stpush() { # Push changes TO the repository of the theme
 	local subtree_dir="${1:-themes/lost-theme}" # Use the provided argument as the subtree directory, or default to "themes/lost-theme"
-	local bare_repo="../$(basename $subtree_dir)" # Compute the path to the sibling repo (assumes ../<subtree_name>)
-	git subtree push --prefix="$subtree_dir" "$bare_repo" main && echo "Subtree push to '$bare_repo' completed!" || echo "Subtree push to '$bare_repo' failed!"
+	local theme_name=$(basename "$subtree_dir") # Extract the folder name to use it as the repository name
+	local bare_repo="${PROJECT_ALT}/$theme_name" # Compute the path to the specified or sibling (../<subtree_name>) repo
+	if [[ ! -d "$bare_repo" ]]; then bare_repo="../$theme_name"; fi # Fallback to sibling directory if not found in PROJECT_ALT
+	git subtree push --prefix="$subtree_dir" "$bare_repo" main && echo "✅ Subtree push to '$bare_repo' completed!" || echo "❌ Subtree push failed!"
 }
 
 function stpull() { # Pull changes FROM the repository of the theme
-	local subtree_dir="${1:-themes/lost-theme}"	# Use the provided argument as the subtree directory, or default to "themes/lost-theme"
-	local bare_repo="../$(basename $subtree_dir)" # Compute the path to the sibling repo (assumes ../<subtree_name>)
-	git subtree pull --prefix="$subtree_dir" "$bare_repo" main --squash && echo "Subtree pull to '$bare_repo' completed!" || echo "Subtree pull to '$bare_repo' failed!"
+	local subtree_dir="${1:-themes/lost-theme}" # Use the provided argument as the subtree directory, or default to "themes/lost-theme"
+	local theme_name=$(basename "$subtree_dir") # Extract the folder name to use it as the repository name
+	local bare_repo="${PROJECT_ALT}/$theme_name" # Compute the path to the specified or sibling (../<subtree_name>) repo
+	if [[ ! -d "$bare_repo" ]]; then bare_repo="../$theme_name"; fi # Fallback to sibling directory if not found in PROJECT_ALT
+	git subtree pull --prefix="$subtree_dir" "$bare_repo" main --squash && echo "✅ Subtree pull from '$bare_repo' completed!" || echo "❌ Subtree pull failed!"
 }
 
 
@@ -305,8 +154,6 @@ function reposu() { # (path) | Set/Unset GIT_DIR & GIT_WORK_TREE for a specific 
 
 #function post_worktree() { cd "$1" && ./.git/hooks/post-worktree.sh }
 
-export MSYS=winsymlinks:nativestrict # Allow symlink creation on Windows perpetually (commented due to it causes tab problems afterwards!)
-
 
 ############
 #   Hugo   #
@@ -324,7 +171,9 @@ alias hs='hugo server --disableFastRender --destination public'
 # Remember to reload .bashrc if you make any changes here either by alias "rel" or: source ~/.bashrc or . ~/.bashrc
 ```
 
+
 ## 📄 .gitconfig
+
 ```sh
 [core]
 	editor = \"C:\\Program Files\\Microsoft VS Code\\bin\\code\" --wait
@@ -332,6 +181,7 @@ alias hs='hugo server --disableFastRender --destination public'
 	eol = lf 
 	symlinks = true
 	excludesfile = C:\\Users\\Rai\\.gitignore
+	ignorecase = false
 [user]
 	email = rai.lopez@outlook.com
 	name = Rai
@@ -376,9 +226,9 @@ alias hs='hugo server --disableFastRender --destination public'
 	lrai = log --graph --full-history --date-order --date=format:'%Y%m%d-%H%M' --pretty=format:'%x08%x09 %C(green)%h%C(reset) %C(cyan)%ad%C(reset)%C(red)%d%C(reset) %s [%C(yellow)%aN%C(reset)]' # Add --all to include unreachable items
 	lprev = log main..origin/main # Preview commit logs of changes
 	lad = log --all --decorate --oneline --graph
-	lall = log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d'
-	m2m = "!f() { current=$(git branch --show-current); echo '[!] Syncing dev -> main...'; git checkout main && git merge dev && git checkout \"$current\"; }; f" # Merge 'dev' into 'main' and return to current branch
-	m2d = "!f() { echo '[!] Syncing main -> dev...'; git merge main; }; f" # Merge 'main' into 'dev' (staying in dev)
+	lall = "!git log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d'"
+	m2main = "!f() { current=$(git branch --show-current); echo \"[!] Fast-forwarding main to dev...\"; git checkout main && git merge dev --ff-only && git checkout \"$current\"; }; f" # Merge 'dev' into 'main' cleanly (ff) and return to current branch
+	m2dev = "!f() { echo \"[!] Merging main into dev...\"; git merge main; }; f" # Merge 'main' into 'dev' (staying in dev)
 	mt = mergetool
 	mv = "mv "
 	rm = "rm "
@@ -386,11 +236,12 @@ alias hs='hugo server --disableFastRender --destination public'
 	r = remote -vv
 	rs = remote set-url # Remote new-url
 	pullauh = git pull --allow-unrelated-histories # Merges histories of two projects that started their lives independently
-	repod = "rev-parse --absolute-git-dir"
-	#repoud = "unset GIT_DIR" # Use function 'reposud' instead
-	repow = "rev-parse --show-toplevel"
-	#repouw = "unset GIT_WORK_TREE" # Use function 'reposuw' instead
-	repodw = "!git rev-parse --absolute-git-dir && git rev-parse --show-toplevel"
+	pom = push origin main
+	repod="rev-parse --absolute-git-dir"
+	#repoud="unset GIT_DIR" # Use function 'reposud' instead
+	repow="rev-parse --show-toplevel"
+	#repouw="unset GIT_WORK_TREE" # Use function 'reposuw' instead
+	repodw="!git rev-parse --absolute-git-dir && git rev-parse --show-toplevel"
 	sh = show --no-patch # Show tag info without diff
 	s = status
 	su = status -u
@@ -417,107 +268,51 @@ alias hs='hugo server --disableFastRender --destination public'
 	branch = auto
 	diff = auto
 	status = auto
+[credential]
+	useHttpPath = false
 ```
 
-## 📄 .gitignore
+## 📂 .ssh/
+```bash
+├───📄 config               # Multi-account mapping & identity routing (See below)
+├───📄 id_lost-scripts      # Main/Org Private Key: Lost-Scripts (DO NOT SHARE!)
+├───📄 id_lost-scripts.pub  # Main/Org Public Key: Lost-Scripts (Uploaded to GitHub)
+├───📄 id_railopez          # Personal Private Key, e.g. (DO NOT SHARE!)
+├───📄 id_railopez.pub      # Personal Public Key, e.g. (Uploaded to GitHub)
+└───📄 known_hosts          # Fingerprints of trusted servers (GitHub, etc.)
+```
+
+### 📄 config
+
 ```sh
-#########
-# PATHS #
-#########
+# Main/Org Account (Name: lost-scripts | Use: git remote add origin git@github.com:lost-scripts/repo.git)
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_lost-scripts
 
-#Utility/*/
-
-
-###########
-# FOLDERS #
-###########
-
-_ARC/
-_ARCH/
-_BAK/
-_BKP/
-_BIN/
-_DEV/
-_DIS/
-_OLD/
-_OTH/
-_OTHER/
-_PRIV/
-_PUB/
-_RAW/
-_REL/
-_RES/
-_RSC/
-_RSCS/
-_TEMP/
-_TMP/
-_TEST/
-_TESTS/
-_TRASH/
-_TST/
-
-_[Aa]rchive/
-_[Bb]ackup/
-_[Bb]in/
-_[Dd]ev/
-_[Dd]evelop/
-_[Dd]evelopment/
-_[Dd]isabled/
-_[Oo]ther/
-_[Rr]eleases/
-_[Rr]esearch/
-_[Rr]esources/
-_[Tt]est/
-_[Tt]ests/
-_[Tt]rash/
-
-#/ls_shapes_window/
-#/ls_wiggle_window/
-#ls_smart_manager/
-#ls_smart_scripts/
-#Modules/ls_modules.lua
-
-
-##############
-# FILE TYPES #
-##############
-
-*.dia~
-*.log
-*.bak
-*.cache
-
-
-#########
-# FILES #
-#########
-
-_INFO.txt
-_[Ii]nfo.txt
-_NOTES.txt
-_[Nn]otes.txt
-_TEMP.txt
-_[Tt]emp.txt
-_TMP.txt
-_[Tt]mp.txt
-_TODO.txt
-_[Tt]odo.txt
+# Personal Account (e.g., Name: RaiLopez | Use: git remote add origin git@github-railopez:RaiLopez/repo.git)
+Host github-railopez
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_railopez # e.g., ~/.ssh/id_railopez
 ```
 
-## 📂 hooks
 
-> :memo: **Note:** Hooks live in the central ".github" repository under "/hooks". Copy them to your repos and ensure they are activated: `git config core.hooksPath .github/hooks` and executable: `chmod +x .github/hooks/*` or `chmod +x <filepath>` (the flag is tracked by Git but may need to be restored on Windows). Local modifications are discouraged unless strictly necessary.
+## 📂 hooks (DEPRECATED)
 
 <dl><dd>
 
-### 📄 hooks/pre-commit
+### 📄 hooks/pre-commit (**DISCONTINUED**, use `BUILD_AUTOASSIST=true` in `.config` now)
 
-- Hook script for reliably update *.lua files ScriptBuild variable
+- Hook script for reliably update *.lua files ScriptBuild variable 
 </dd></dl>
 
 <dl><dd>
 
-### 📄 hooks/post-commit
+### 📄 hooks/post-commit (**DISCONTINUED**)
 
 - Hook script for writing reliable ScriptBuild based *.lua.log files
 </dd></dl>
+
+> 📝 **Note:** ~~Hooks lived in the central ".github" repository under "/hooks". Copy them to your repos and ensure they are activated: `git config core.hooksPath .github/hooks` and executable: `chmod +x .github/hooks/*` or `chmod +x <filepath>` (the flag is tracked by Git but may need to be restored on Windows). Local modifications are discouraged unless strictly necessary.~~
