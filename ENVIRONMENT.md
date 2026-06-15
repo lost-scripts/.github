@@ -180,11 +180,7 @@ alias hs='hugo server --disableFastRender --destination public'
 	autocrlf = false
 	eol = lf 
 	symlinks = true
-	excludesfile = C:\\Users\\Rai\\.gitignore
-	ignorecase = false
-[user]
-	email = rai.lopez@outlook.com
-	name = Rai
+	excludesfile = ~/.gitignore
 [init]
 	defaultBranch = main
 [merge "ours"]
@@ -270,6 +266,8 @@ alias hs='hugo server --disableFastRender --destination public'
 	status = auto
 [credential]
 	useHttpPath = false
+[include]
+	path = ~/.config/git/config
 ```
 
 ## 📂 .ssh/

@@ -10,6 +10,14 @@ Guide and best practices for developing Lost Scripts for [MOHO][1]<sup>®</sup> 
 
 ---
 
+### 0\. ⏱️ **In Zero Seconds** (Your daily workflow once set up)
+
+1. **Code:** Create or work in your script(s)/dependencies and test in Moho® as usual, but securely inside the Monorepo.
+2. **Build:** Run the Builder (`BUILDER.sh`) to automatically gather dependencies, inject metadata, and generate the final distributions (assets, docs, and ZIPs).
+3. **Publish:** Choose whether to test your compiled changes locally and publish manually, or push them straight to GitHub from the script prompt... *That's all!*
+
+---
+
 ### 1\. 🗂️ Project Structure/Architecture
 
 The Lost Scripts™ project is organized around a unified local workspace (e.g., a folder named *LS*). This workspace acts as the root for the aforementioned *Monorepo*, *Script Packs*, and administrative tools, and it's based on the following folder structure and file logic:
