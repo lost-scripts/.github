@@ -113,6 +113,18 @@ function stpull() { # Pull changes FROM the repository of the theme
 	git subtree pull --prefix="$subtree_dir" "$bare_repo" main --squash && echo "✅ Subtree pull from '$bare_repo' completed!" || echo "❌ Subtree pull failed!"
 }
 
+function snapshots() { # Export all/some historical versions of a file to a local folder
+	[ -z "$1" ] && { echo "❌ Please specify a filename (e.g., snapshots MYFILE.sh)"; return 1; }
+	local file="$1"; local limit="${2:+-n $2}"; local commits=$(git log $limit --date="format:%Y%m%d-%H%M" --format="%h %ad" -- "$file")
+	[ -z "$commits" ] && { echo "⚠️ No commits found for file: $file"; return 0; }
+
+	local folder=".snapshots_$(echo "$file" | tr './' '__')"; mkdir -p "../$folder"
+	echo "$commits" | while read -r hash date; do
+		git show "$hash:$file" > "../$folder/${date}_${hash}_$(basename "$file")" 2>/dev/null
+	done
+	echo "✅ Done! Check the folder: ../$folder"
+} # USAGE: snapshots MYFILE.sh 4 (optional)
+
 
 ############
 # Other... #

@@ -175,7 +175,7 @@ The Lost Scripts™ project is organized around a unified local workspace (e.g.,
 
 ### 2\. 💻 Environment Setup
 
-The project requires *[Git Bash][5]* on Windows (or a standard Bash shell on Unix-like systems) [^1] and, recommendably, that the appropriate environment [^2] has been set up.
+The project requires *[Git Bash][5]* on Windows (the inability to test it on other OSs such as macOS prevents guaranteeing cross-platform compatibility) [^1] and, recommendably, that the appropriate environment [^2] has been set up.
 
 * **2.1\. Cloning:** Clone the *Monorepo* *[lost-scripts][6]* into your workspace folder (e.g., `LS/`).
 
@@ -196,14 +196,12 @@ The project requires *[Git Bash][5]* on Windows (or a standard Bash shell on Uni
 
 	- **Selective Pack Symlinking** (Automated & Surgical): Ideal for coding specific tools while keeping your production environment intact. The Builder can automatically inject individual symlinks into Moho for the active packages you choose. To use this, set `BUILD_ASSIST["SYMLINKS"]=true` and list the pack IDs and shared files that you want to mirror inside the `BUILD_SYMLINKS` array (see configuration below).
 
-	- **Full Environment Toggling** (Global Workspace Link): Ideal for deep core testing or isolating your entire monorepo. Instead of file-by-file linking, you can seamlessly switch Moho's entire script infrastructure between animating (production) and coding (development) taking advantage of the symlink the Builder provides (i.e., `ln -s ../LS/lost-scripts Scripts.OFF`) and using a multi-step* renaming strategy:
+	- **Full Environment Toggling** (Global Workspace Link): Ideal for deep core testing or isolating your entire monorepo. Instead of file-by-file linking, you can seamlessly switch Moho's entire script infrastructure between animating (production) and coding (development) taking advantage of the symlink the Builder provides (i.e., `ln -s ../LS/lost-scripts Scripts.OFF`) and using a [multi-step*][*1] renaming strategy:
 
 		| Target Mode     | *The Symlink* (Points to Monorepo) | The Real Directory In Your *CCF* |
 		| :-------------- | :--------------------------------: | :------------------------------: |
 		| **DEVELOPMENT** |             *Scripts*              |            Scripts.OFF           |
 		| **PRODUCTION**  |           *Scripts.OFF*            |              Scripts             |
-
-		*<sub>To avoid name collisions while dealing with namesake folders in Windows, always append a temporary extension first (e.g., rename `Scripts` to `Scripts.TMP`, adjust the target item, and finally restore the definitive names).</sub>
 
 		> ⚠ **Warning**: Moho's *Scripts > Install Script...* wizard has a known recursive bug that truncates workspace files to 0KB if the `Custom Content/Scripts` directory itself is chosen as the source. Exercise extreme caution when dealing with it, or temporarily (re)move the symlink beforehand to safeguard the Monorepo from data loss.
 
@@ -436,6 +434,8 @@ All code changes, asset updates, and documentation (via `docs/script_id/index.md
 [^1]: Current development should be done in the `dev` branch (or derivatives) and merged into `main` once significant progress has been made and tested. More on this later...
 
 [^2]: Based on settings suggested by the [ENVIRONMENT.md](./ENVIRONMENT.md "Go to file...") file, specifically regarding Bash/Git aliases, configurations, and Git credentials for the *lost-scripts* organization.
+
+[*1]: ## "💡 Windows tip: Rename 'Scripts' to 'Scripts.TMP' first to bypass namesake folder collisions before setting the definitive names."
 
 [1]: <https://moho.lostmarble.com> 'Go to Moho® website...'
 
