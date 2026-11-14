@@ -196,7 +196,7 @@ The project requires *[Git Bash][5]* on Windows (the inability to test it on oth
 
 	- **Selective Pack Symlinking** (Automated & Surgical): Ideal for coding specific tools while keeping your production environment intact. The Builder can automatically inject individual symlinks into Moho for the active packages you choose. To use this, set `BUILD_ASSIST["SYMLINKS"]=true` and list the pack IDs and shared files that you want to mirror inside the `BUILD_SYMLINKS` array (see configuration below).
 
-	- **Full Environment Toggling** (Global Workspace Link): Ideal for deep core testing or isolating your entire monorepo. Instead of file-by-file linking, you can seamlessly switch Moho's entire script infrastructure between animating (production) and coding (development) taking advantage of the symlink the Builder provides (i.e., `ln -s ../LS/lost-scripts Scripts.OFF`) and using a [multi-step*][*1] renaming strategy:
+	- **Full Environment Toggling** (Global Workspace Link): Ideal for deep core testing or isolating your entire monorepo. Instead of file-by-file linking, you can seamlessly switch Moho's entire script infrastructure between animating (production) and coding (development) taking advantage of the symlink the Builder provides (i.e., `ln -s ../LS/lost-scripts Scripts.OFF`) and using a multi-step[*][*1] renaming strategy:
 
 		| Target Mode     | *The Symlink* (Points to Monorepo) | The Real Directory In Your *CCF* |
 		| :-------------- | :--------------------------------: | :------------------------------: |
