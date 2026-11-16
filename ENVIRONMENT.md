@@ -251,7 +251,7 @@ alias hs='hugo server --disableFastRender --destination public'
 	#repouw="unset GIT_WORK_TREE" # Use function 'reposuw' instead
 	repodw="!git rev-parse --absolute-git-dir && git rev-parse --show-toplevel"
 	sh = show --no-patch # Show tag info without diff
-	s = status
+	s = "!f() { git status; count=$(git stash list | wc -l); if [ \"$count\" -gt 0 ]; then echo -e \"\\033[33mWARNING!:\\033[0m You have $count stashed change/s (use \\\"git stash list\\\" to review)\"; fi; }; f"
 	su = status -u
 	suno = git status -uno
 	sbtr = "!git log --all --format=%b | awk '/git-subtree-dir/{ print $NF }' | sort -u"
